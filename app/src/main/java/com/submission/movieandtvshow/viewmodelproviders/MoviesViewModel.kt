@@ -1,0 +1,6 @@
+package com.submission.movieandtvshow.viewmodelproviders
+
+import androidx.lifecycle.ViewModel
+
+class MoviesViewModel: ViewModel() {
+}
