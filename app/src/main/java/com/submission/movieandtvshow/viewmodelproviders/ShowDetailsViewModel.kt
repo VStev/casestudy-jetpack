@@ -1,24 +1,31 @@
 package com.submission.movieandtvshow.viewmodelproviders
 
 import androidx.lifecycle.ViewModel
+import com.submission.movieandtvshow.R
 import com.submission.movieandtvshow.dataobjects.Movie
 import com.submission.movieandtvshow.dataobjects.TVShow
 import com.submission.movieandtvshow.dummydatas.Dummy
 
 class ShowDetailsViewModel: ViewModel() {
-    private var showID : String = ""
+    private var showID : String? = ""
     private var movie : Movie? = null
     private var show : TVShow? = null
 
-    fun setShowID(showID: String){
-        this.showID = showID
+    fun setShowID(showID: String?){
+        if (showID != null){
+            this.showID = showID
+        }else{
+            this.showID = null
+        }
     }
 
     fun getMovie(): Movie? {
         val movies = Dummy.generateMovies()
-        for (movie in movies){
-            if (movie.movieID == showID) {
-                this.movie = movie
+        if (showID != null){
+            for (movie in movies){
+                if (movie.movieID == showID) {
+                    this.movie = movie
+                }
             }
         }
         return movie
@@ -26,9 +33,11 @@ class ShowDetailsViewModel: ViewModel() {
 
     fun getShow(): TVShow? {
         val shows = Dummy.generateShows()
-        for (show in shows){
-            if (show.showID == showID){
-                this.show = show
+        if (showID != null) {
+            for (show in shows) {
+                if (show.showID == showID) {
+                    this.show = show
+                }
             }
         }
         return show

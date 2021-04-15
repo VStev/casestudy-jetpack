@@ -89,7 +89,6 @@
         android:visibility="gone">
 
         <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/gifImageView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

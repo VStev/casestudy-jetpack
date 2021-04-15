@@ -127,6 +127,18 @@ object Dummy {
                 R.drawable.poster_the_walking_dead
             )
         )
+        shows.add(
+            TVShow(
+                null,
+                "Faulty Data",
+                "2048",
+                "Fight the dead. Fear the living.\nSheriff's deputy Rick Grimes awakens from a coma to find a post-apocalyptic world dominated by flesh-eating zombies. He sets out to find his family and encounters many other survivors along the way.",
+                true,
+                200,
+                12,
+                R.drawable.poster_hathaway
+            )
+        )
         return shows
     }
 
@@ -230,6 +242,16 @@ object Dummy {
                 "Rodney Rothman",
                 "More Than One Wears the Mask\nMiles Morales is juggling his life between being a high school student and being a spider-man. When Wilson \"Kingpin\" Fisk uses a super collider, others from across the Spider-Verse are transported to this dimension.",
                 R.drawable.poster_spiderman
+            )
+        )
+        movies.add(
+            Movie(
+                null,
+                "Faulty Data",
+                "30 June 2049",
+                "Rodney Rothman",
+                "More Than One Wears the Mask\nMiles Morales is juggling his life between being a high school student and being a spider-man. When Wilson \"Kingpin\" Fisk uses a super collider, others from across the Spider-Verse are transported to this dimension.",
+                R.drawable.poster_2049
             )
         )
         return movies
