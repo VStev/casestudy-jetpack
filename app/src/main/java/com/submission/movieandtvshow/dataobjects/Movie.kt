@@ -1,6 +1,7 @@
 package com.submission.movieandtvshow.dataobjects
 
 data class Movie(
+    val movieID : String = "",
     val title : String = "",
     val releaseYear : String = "",
     val director : String = "",
