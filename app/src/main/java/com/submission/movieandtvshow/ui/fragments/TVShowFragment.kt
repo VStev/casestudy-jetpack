@@ -1,16 +1,15 @@
 package com.submission.movieandtvshow.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.submission.movieandtvshow.R
 import com.submission.movieandtvshow.databinding.FragmentTVShowBinding
-import com.submission.movieandtvshow.ui.activities.HomeActivity
 import com.submission.movieandtvshow.viewmodelproviders.TVShowViewModel
 
 class TVShowFragment : Fragment() {

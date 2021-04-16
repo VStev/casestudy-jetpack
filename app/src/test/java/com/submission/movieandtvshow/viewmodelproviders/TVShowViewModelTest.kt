@@ -1,9 +1,9 @@
 package com.submission.movieandtvshow.viewmodelproviders
 
-import org.junit.Test
-
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
+import org.junit.Test
 
 class TVShowViewModelTest {
     private lateinit var viewModel: TVShowViewModel
@@ -17,6 +17,6 @@ class TVShowViewModelTest {
     fun getShows() {
         val shows = viewModel.getShows()
         assertNotNull(shows)
-        assertEquals(10, shows.size)
+        assertEquals(11, shows.size)
     }
 }

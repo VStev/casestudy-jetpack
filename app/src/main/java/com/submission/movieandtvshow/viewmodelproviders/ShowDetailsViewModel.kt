@@ -1,7 +1,6 @@
 package com.submission.movieandtvshow.viewmodelproviders
 
 import androidx.lifecycle.ViewModel
-import com.submission.movieandtvshow.R
 import com.submission.movieandtvshow.dataobjects.Movie
 import com.submission.movieandtvshow.dataobjects.TVShow
 import com.submission.movieandtvshow.dummydatas.Dummy

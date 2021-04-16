@@ -2,7 +2,8 @@ package com.submission.movieandtvshow.ui.activities
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.swipeUp
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -15,6 +16,7 @@ import org.junit.Test
 
 class HomeActivityTest{
     private val dummyShow = Dummy.generateShows()
+    private val dummyMovie = Dummy.generateMovies()
 
     @get:Rule
     var activityRule = ActivityScenarioRule(HomeActivity::class.java)
@@ -30,6 +32,7 @@ class HomeActivityTest{
         onView(withId(R.id.recyclerView)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(6, click()))
         onView(withId(R.id.poster_image)).check(matches(isDisplayed()))
         onView(withId(R.id.title_text)).check(matches(isDisplayed()))
+        onView(withId(R.id.title_text)).check(matches(withText(dummyShow[6].title)))
         onView(withId(R.id.release_year)).check(matches(isDisplayed()))
         onView(withId(R.id.director_or_ongoing)).check(matches(isDisplayed()))
         onView(withId(R.id.description)).check(matches(isDisplayed()))
@@ -43,7 +46,7 @@ class HomeActivityTest{
     fun loadMovies(){
         onView(withId(R.id.nav_movie)).perform(click())
         onView(withId(R.id.recyclerView)).check(matches(isDisplayed()))
-        onView(withId(R.id.recyclerView)).perform(RecyclerViewActions.scrollToPosition< RecyclerView.ViewHolder>(dummyShow.size))
+        onView(withId(R.id.recyclerView)).perform(RecyclerViewActions.scrollToPosition< RecyclerView.ViewHolder>(dummyMovie.size))
     }
 
     @Test
@@ -53,6 +56,7 @@ class HomeActivityTest{
         onView(withId(R.id.recyclerView)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(6, click()))
         onView(withId(R.id.poster_image)).check(matches(isDisplayed()))
         onView(withId(R.id.title_text)).check(matches(isDisplayed()))
+        onView(withId(R.id.title_text)).check(matches(withText(dummyMovie[6].title)))
         onView(withId(R.id.release_year)).check(matches(isDisplayed()))
         onView(withId(R.id.director_or_ongoing)).check(matches(isDisplayed()))
         onView(withId(R.id.description)).check(matches(isDisplayed()))
