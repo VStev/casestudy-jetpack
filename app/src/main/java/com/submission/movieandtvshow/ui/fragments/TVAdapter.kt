@@ -14,6 +14,7 @@ import com.submission.movieandtvshow.ui.activities.ShowDetailsActivity
 class TVAdapter : RecyclerView.Adapter<TVAdapter.CardViewHolder>() {
 
     private val mData = ArrayList<TVShow>()
+    private val imageUrl = "https://image.tmdb.org/t/p/w500"
 
     fun setData(items: List<TVShow>) {
         mData.clear()
@@ -24,8 +25,9 @@ class TVAdapter : RecyclerView.Adapter<TVAdapter.CardViewHolder>() {
     inner class CardViewHolder(items: View) : RecyclerView.ViewHolder(items) {
         private val binding = CardviewLayoutBinding.bind(itemView)
         fun bind(showData: TVShow){
+            val url = imageUrl + showData.poster
             Glide.with(binding.root)
-                .load(showData.poster)
+                .load(url)
                 .into(binding.imagePosterThumbnail)
             binding.textTitle.text = showData.title
             binding.year.text = showData.releaseYear

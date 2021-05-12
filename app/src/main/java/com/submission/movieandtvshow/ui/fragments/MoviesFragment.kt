@@ -5,18 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.submission.movieandtvshow.R
 import com.submission.movieandtvshow.databinding.FragmentMoviesBinding
-import com.submission.movieandtvshow.viewmodelproviders.MoviesViewModel
+import com.submission.movieandtvshow.viewmodelproviders.MainViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MoviesFragment : Fragment() {
     private var binding : FragmentMoviesBinding? = null
     private val viewBind get() = binding as FragmentMoviesBinding
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewModel : MoviesViewModel
+    private val movieViewModel: MainViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,17 +29,21 @@ class MoviesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById(R.id.recyclerView)
-        viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MoviesViewModel::class.java]
         showLayout()
     }
 
     private fun showLayout() {
-        val shows = viewModel.getMovies()
         val dataAdapter = MovieAdapter()
-        dataAdapter.setData(shows)
+        movieViewModel.getMovies().observe(viewLifecycleOwner, { Movie ->
+            if (Movie != null){
+                dataAdapter.setData(Movie)
+            }else{
+                viewBind.recyclerView.visibility = View.GONE
+                viewBind.notFound.visibility = View.VISIBLE
+            }
+        })
         with(recyclerView){
             layoutManager = LinearLayoutManager(context)
-            setHasFixedSize(true)
             adapter = dataAdapter
         }
     }
