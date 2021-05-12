@@ -41,19 +41,37 @@ class HomeActivityTest{
         onView(withId(R.id.recyclerView)).perform(RecyclerViewActions.scrollToPosition< RecyclerView.ViewHolder>(10))
     }
 
+    //use this IF there is NO DATA in the favourite
     @Test
+    fun loadFavShow(){
+        onView(withId(R.id.nav_star_show)).perform(click())
+        onView(withId(R.id.recyclerView)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.not_found)).check(matches(isDisplayed()))
+    }
+
+    //use this IF there is NO DATA in the favourite
+    @Test
+    fun loadFavMovie(){
+        onView(withId(R.id.nav_star_movie)).perform(click())
+        onView(withId(R.id.recyclerView)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.not_found)).check(matches(isDisplayed()))
+    }
+
+    //use this IF data EXISTS in the favourite database
+    /*@Test
     fun loadFavShow(){
         onView(withId(R.id.nav_star_show)).perform(click())
         onView(withId(R.id.recyclerView)).check(matches(isDisplayed()))
         onView(withId(R.id.recyclerView)).perform(ViewActions.swipeUp())
     }
 
+    //use this IF data EXISTS in the favourite database
     @Test
     fun loadFavMovie(){
         onView(withId(R.id.nav_star_movie)).perform(click())
         onView(withId(R.id.recyclerView)).check(matches(isDisplayed()))
         onView(withId(R.id.recyclerView)).perform(ViewActions.swipeUp())
-    }
+    }*/
 
     @Test
     fun loadShowDetail(){

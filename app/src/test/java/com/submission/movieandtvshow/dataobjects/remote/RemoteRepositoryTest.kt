@@ -2,6 +2,8 @@ package com.submission.movieandtvshow.dataobjects.remote
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.DataSource
+import androidx.paging.PagedList
 import com.google.gson.Gson
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
@@ -14,6 +16,8 @@ import com.submission.movieandtvshow.dataobjects.repository.RemoteRepository
 import com.submission.movieandtvshow.utilities.AppExecutors
 import com.submission.movieandtvshow.utilities.JsonFilesInKt
 import com.submission.movieandtvshow.utilities.LiveDataUtility
+import com.submission.movieandtvshow.utilities.PagedListUtility
+import com.submission.movieandtvshow.vo.Resource
 import com.submission.movieandtvshow.webapi.RetrofitCallback
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -23,6 +27,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 import org.mockito.junit.MockitoJUnitRunner
 
 
@@ -49,26 +54,26 @@ class RemoteRepositoryTest {
 
     @Test
     fun getMovies() {
+        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, Movie>
         val movieLists: List<Movie> = Gson().fromJson(JsonFilesInKt.discoverMovie, MovieDiscoverContainer::class.java).result
-        val result =  MutableLiveData<List<Movie>>()
-        result.value = movieLists
-        `when`(localDataSource.getMovies()).thenReturn(result)
-        val shows = LiveDataUtility.getValue(repository.getMovies())
+        val result = Resource.success(PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverMovie, MovieDiscoverContainer::class.java).result))
+        `when`(localDataSource.getMovies()).thenReturn(dataSourceFactory)
+        repository.getMovies()
         verify(localDataSource).getMovies()
-        assertNotNull(shows)
-        assertEquals(movieLists.size, shows.data?.size)
+        assertNotNull(result)
+        assertEquals(movieLists.size, result.data?.size)
     }
 
     @Test
     fun getShows() {
+        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, TVShow>
         val showLists: List<TVShow> = Gson().fromJson(JsonFilesInKt.discoverShow, TVDiscoverContainer::class.java).result
-        val result =  MutableLiveData<List<TVShow>>()
-        result.value = showLists
-        `when`(localDataSource.getShows()).thenReturn(result)
-        val shows = LiveDataUtility.getValue(repository.getShows())
+        val result =  Resource.success(PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverShow, TVDiscoverContainer::class.java).result))
+        `when`(localDataSource.getShows()).thenReturn(dataSourceFactory)
+        repository.getShows()
         verify(localDataSource).getShows()
-        assertNotNull(shows)
-        assertEquals(showLists.size, shows.data?.size)
+        assertNotNull(result)
+        assertEquals(showLists.size, result.data?.size)
     }
 
     @Test
