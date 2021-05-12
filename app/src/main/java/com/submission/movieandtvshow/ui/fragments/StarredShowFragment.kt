@@ -38,6 +38,7 @@ class StarredShowFragment : Fragment() {
         movieViewModel.getFavouriteShows().observe(viewLifecycleOwner, { TVShow ->
             if (TVShow.isNotEmpty()){
                 dataAdapter.setData(TVShow)
+                dataAdapter.submitList(TVShow)
             }else{
                 viewBind.recyclerView.visibility = View.GONE
                 viewBind.notFound.visibility = View.VISIBLE

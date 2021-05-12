@@ -2,6 +2,8 @@ package com.submission.movieandtvshow.dataobjects.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.submission.movieandtvshow.dataobjects.Movie
 import com.submission.movieandtvshow.dataobjects.TVShow
 import com.submission.movieandtvshow.utilities.AppExecutors
@@ -25,30 +27,69 @@ class RemoteRepository(
             }
     }
 
-    fun getMovies(): LiveData<Resource<List<Movie>>> {
-        return object: NetworkBoundResource<List<Movie>, List<Movie>>(appExecutors){
-            override fun loadFromDB(): LiveData<List<Movie>> = localDataSource.getMovies()
+    fun getMovies(): LiveData<Resource<PagedList<Movie>>> {
+        return object: NetworkBoundResource<PagedList<Movie>, List<Movie>>(appExecutors){
+            override fun loadFromDB(): LiveData<PagedList<Movie>> {
+                val config = PagedList.Config.Builder()
+                    .setEnablePlaceholders(false)
+                    .setInitialLoadSizeHint(20)
+                    .setPageSize(20)
+                    .build()
+                return LivePagedListBuilder(localDataSource.getMovies(), config).build()
+            }
 
-            override fun shouldFetch(data: List<Movie>?): Boolean = data == null || data.isEmpty()
+            override fun shouldFetch(data: PagedList<Movie>?): Boolean = data == null || data.isEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<Movie>>> = retrofit.getMovies()
 
             override fun saveCallResult(data: List<Movie>) {
-                localDataSource.insertMovies(data)
+                val list = ArrayList<Movie>()
+                for (movie in data){
+                    val item = Movie(
+                        movie.movieID,
+                        movie.title,
+                        movie.releaseYear,
+                        movie.details,
+                        movie.poster
+                    )
+                    list.add(item)
+                }
+                localDataSource.insertMovies(list)
             }
         }.asLiveData()
     }
 
-    fun getShows(): LiveData<Resource<List<TVShow>>> {
-        return object: NetworkBoundResource<List<TVShow>, List<TVShow>>(appExecutors){
-            override fun loadFromDB(): LiveData<List<TVShow>> = localDataSource.getShows()
+    fun getShows(): LiveData<Resource<PagedList<TVShow>>> {
+        return object: NetworkBoundResource<PagedList<TVShow>, List<TVShow>>(appExecutors){
+            override fun loadFromDB(): LiveData<PagedList<TVShow>> {
+                val config = PagedList.Config.Builder()
+                    .setEnablePlaceholders(false)
+                    .setInitialLoadSizeHint(20)
+                    .setPageSize(20)
+                    .build()
+                return LivePagedListBuilder(localDataSource.getShows(), config).build()
+            }
 
-            override fun shouldFetch(data: List<TVShow>?): Boolean = data == null || data.isEmpty()
+            override fun shouldFetch(data: PagedList<TVShow>?): Boolean = data == null || data.isEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<TVShow>>> = retrofit.getShows()
 
             override fun saveCallResult(data: List<TVShow>) {
-                localDataSource.insertShows(data)
+                val list = ArrayList<TVShow>()
+                for (show in data){
+                    val item = TVShow(
+                        show.showID,
+                        show.title,
+                        show.releaseYear,
+                        show.details,
+                        show.ongoing,
+                        show.episodes,
+                        show.seasons,
+                        show.poster
+                    )
+                    list.add(item)
+                }
+                localDataSource.insertShows(list)
             }
         }.asLiveData()
     }
@@ -81,9 +122,23 @@ class RemoteRepository(
         }.asLiveData()
     }
 
-    fun getFavouriteMovies(): LiveData<List<Movie>> = localDataSource.getFavMovie(true)
+    fun getFavouriteMovies(): LiveData<PagedList<Movie>> {
+        val config = PagedList.Config.Builder()
+            .setEnablePlaceholders(false)
+            .setInitialLoadSizeHint(4)
+            .setPageSize(20)
+            .build()
+        return LivePagedListBuilder(localDataSource.getFavMovie(true), config).build()
+    }
 
-    fun getFavouriteShows(): LiveData<List<TVShow>> = localDataSource.getFavShow(true)
+    fun getFavouriteShows(): LiveData<PagedList<TVShow>> {
+        val config = PagedList.Config.Builder()
+            .setEnablePlaceholders(false)
+            .setInitialLoadSizeHint(4)
+            .setPageSize(20)
+            .build()
+        return LivePagedListBuilder(localDataSource.getFavShow(true), config).build()
+    }
 
     fun setFavouriteMovie(show: String, state: Boolean){
         Log.d("RAISHUU", "setFavouriteMovie: CALLED $state")

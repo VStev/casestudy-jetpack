@@ -1,6 +1,7 @@
 package com.submission.movieandtvshow.dataobjects.room
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.*
 import com.submission.movieandtvshow.dataobjects.Movie
 import com.submission.movieandtvshow.dataobjects.TVShow
@@ -8,16 +9,16 @@ import com.submission.movieandtvshow.dataobjects.TVShow
 @Dao
 interface EntertainmentDAO {
     @Query("SELECT * FROM movies")
-    fun getMovies(): LiveData<List<Movie>>
+    fun getMovies(): DataSource.Factory<Int, Movie>
 
     @Query("SELECT * FROM shows")
-    fun getShows(): LiveData<List<TVShow>>
+    fun getShows(): DataSource.Factory<Int, TVShow>
 
     @Query("SELECT * FROM movies WHERE fav = :fav")
-    fun getFavMovie(fav: Boolean): LiveData<List<Movie>>
+    fun getFavMovie(fav: Boolean): DataSource.Factory<Int, Movie>
 
     @Query("SELECT * FROM shows WHERE fav = :fav")
-    fun getFavShow(fav: Boolean): LiveData<List<TVShow>>
+    fun getFavShow(fav: Boolean): DataSource.Factory<Int, TVShow>
 
     @Query("SELECT * FROM movies WHERE id = :showId")
     fun getMovieDetails(showId: String): LiveData<Movie>

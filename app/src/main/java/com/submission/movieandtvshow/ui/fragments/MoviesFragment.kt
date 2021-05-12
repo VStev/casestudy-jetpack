@@ -40,18 +40,22 @@ class MoviesFragment : Fragment() {
                 when(Movie.status){
                     //Status.LOADING -> do something
                     Status.SUCCESS -> {
+                        dataAdapter.notifyItemRangeRemoved(0, 20)
+                        dataAdapter.notifyItemRangeInserted(0, 20)
                         Movie.data?.let { dataAdapter.setData(it) }
+                        dataAdapter.notifyDataSetChanged()
+                        Movie.data?.let { dataAdapter.submitList(it) }
                     }
                     Status.ERROR -> {
                         viewBind.recyclerView.visibility = View.GONE
                         viewBind.notFound.visibility = View.VISIBLE
                     }
                 }
+                with(recyclerView){
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = dataAdapter
+                }
             }
         })
-        with(recyclerView){
-            layoutManager = LinearLayoutManager(context)
-            adapter = dataAdapter
-        }
     }
 }
