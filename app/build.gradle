@@ -49,6 +49,7 @@ dependencies {
     implementation "io.insert-koin:koin-android-ext:3.0.1"
     implementation "io.insert-koin:koin-androidx-workmanager:3.0.1"
     implementation "androidx.test.espresso:espresso-idling-resource:3.3.0"
+    implementation 'androidx.paging:paging-runtime-ktx:3.0.0'
 
     implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation 'androidx.recyclerview:recyclerview:1.2.0'

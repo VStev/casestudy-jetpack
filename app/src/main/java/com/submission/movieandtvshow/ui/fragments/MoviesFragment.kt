@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.submission.movieandtvshow.R
 import com.submission.movieandtvshow.databinding.FragmentMoviesBinding
 import com.submission.movieandtvshow.viewmodelproviders.MainViewModel
+import com.submission.movieandtvshow.vo.Status
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MoviesFragment : Fragment() {
@@ -36,10 +37,16 @@ class MoviesFragment : Fragment() {
         val dataAdapter = MovieAdapter()
         movieViewModel.getMovies().observe(viewLifecycleOwner, { Movie ->
             if (Movie != null){
-                dataAdapter.setData(Movie)
-            }else{
-                viewBind.recyclerView.visibility = View.GONE
-                viewBind.notFound.visibility = View.VISIBLE
+                when(Movie.status){
+                    //Status.LOADING -> do something
+                    Status.SUCCESS -> {
+                        Movie.data?.let { dataAdapter.setData(it) }
+                    }
+                    Status.ERROR -> {
+                        viewBind.recyclerView.visibility = View.GONE
+                        viewBind.notFound.visibility = View.VISIBLE
+                    }
+                }
             }
         })
         with(recyclerView){

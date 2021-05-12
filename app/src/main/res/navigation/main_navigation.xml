@@ -28,4 +28,22 @@
         android:name="com.submission.movieandtvshow.ui.activities.ShowDetailsActivity"
         android:label="activity_show_details"
         tools:layout="@layout/activity_show_details" />
+    <fragment
+        android:id="@+id/nav_star_movie"
+        android:name="com.submission.movieandtvshow.ui.fragments.StarredMovieFragment"
+        android:label="Starred Movie"
+        tools:layout="@layout/fragment_starred_movie" >
+        <action
+            android:id="@+id/action_starredMovieFragment_to_nav_details"
+            app:destination="@id/nav_details" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_star_show"
+        android:name="com.submission.movieandtvshow.ui.fragments.StarredShowFragment"
+        android:label="Starred Show"
+        tools:layout="@layout/fragment_starred_show" >
+        <action
+            android:id="@+id/action_starredShowFragment_to_nav_details"
+            app:destination="@id/nav_details" />
+    </fragment>
 </navigation>

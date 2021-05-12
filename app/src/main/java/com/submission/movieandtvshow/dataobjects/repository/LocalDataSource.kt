@@ -21,4 +21,24 @@ class LocalDataSource private constructor(private val entertainmentDAO: Entertai
     fun getMovieDetails(showId: String): LiveData<Movie> = entertainmentDAO.getMovieDetails(showId)
 
     fun getShowDetails(showId: String): LiveData<TVShow> = entertainmentDAO.getShowDetails(showId)
+
+    fun getFavMovie(fav: Boolean): LiveData<List<Movie>> = entertainmentDAO.getFavMovie(fav)
+
+    fun getFavShow(fav: Boolean): LiveData<List<TVShow>> = entertainmentDAO.getFavShow(fav)
+
+    fun insertMovies(movies: List<Movie>) = entertainmentDAO.insertMovies(movies)
+
+    fun insertShows(shows: List<TVShow>) = entertainmentDAO.insertShows(shows)
+
+    fun insertSingleShow(show: TVShow) = entertainmentDAO.insertSingleShow(show)
+
+    fun insertSingleMovie(show: Movie) = entertainmentDAO.insertSingleMovie(show)
+
+    fun setFavouriteMovie(show: String, state: Boolean){
+        entertainmentDAO.setFavouriteMovie(state, show)
+    }
+
+    fun setFavouriteShow(show: String, state: Boolean){
+        entertainmentDAO.setFavouriteShow(state, show)
+    }
 }

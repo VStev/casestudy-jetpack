@@ -9,10 +9,10 @@ import com.google.gson.annotations.SerializedName
 @Entity(tableName = "movies")
 data class Movie(
     @PrimaryKey
-    @NonNull
     @ColumnInfo(name = "id")
     @SerializedName("id")
-    var movieID: String? = "",
+    @NonNull
+    var movieID: String = "",
 
     @ColumnInfo(name = "title")
     @SerializedName("title")
@@ -28,5 +28,8 @@ data class Movie(
 
     @ColumnInfo(name = "poster_path")
     @SerializedName("poster_path")
-    var poster: String = ""
+    var poster: String = "",
+
+    @ColumnInfo(name = "fav")
+    var fav: Boolean = false
 )

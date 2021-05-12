@@ -15,4 +15,7 @@
     <string name="not_found_header">Uh Oh</string>
     <string name="ongoing_text">ONGOING</string>
     <string name="season_completed_text">SEASON COMPLETED</string>
+    <string name="starred_shows">Starred Shows</string>
+    <string name="starred_movies">Starred Movies</string>
+    <string name="star">Star</string>
 </resources>

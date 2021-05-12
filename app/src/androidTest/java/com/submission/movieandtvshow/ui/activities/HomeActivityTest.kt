@@ -41,6 +41,19 @@ class HomeActivityTest{
         onView(withId(R.id.recyclerView)).perform(RecyclerViewActions.scrollToPosition< RecyclerView.ViewHolder>(10))
     }
 
+    @Test
+    fun loadFavShow(){
+        onView(withId(R.id.nav_star_show)).perform(click())
+        onView(withId(R.id.recyclerView)).check(matches(isDisplayed()))
+        onView(withId(R.id.recyclerView)).perform(ViewActions.swipeUp())
+    }
+
+    @Test
+    fun loadFavMovie(){
+        onView(withId(R.id.nav_star_movie)).perform(click())
+        onView(withId(R.id.recyclerView)).check(matches(isDisplayed()))
+        onView(withId(R.id.recyclerView)).perform(ViewActions.swipeUp())
+    }
 
     @Test
     fun loadShowDetail(){

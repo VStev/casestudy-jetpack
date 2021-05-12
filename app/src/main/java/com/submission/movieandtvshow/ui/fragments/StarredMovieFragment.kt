@@ -8,22 +8,21 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.submission.movieandtvshow.R
-import com.submission.movieandtvshow.databinding.FragmentTVShowBinding
+import com.submission.movieandtvshow.databinding.FragmentStarredMovieBinding
 import com.submission.movieandtvshow.viewmodelproviders.MainViewModel
-import com.submission.movieandtvshow.vo.Status
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TVShowFragment : Fragment() {
-    private var binding : FragmentTVShowBinding? = null
-    private val viewBind get() = binding as FragmentTVShowBinding
+class StarredMovieFragment : Fragment() {
+    private var binding : FragmentStarredMovieBinding? = null
+    private val viewBind get() = binding as FragmentStarredMovieBinding
     private lateinit var recyclerView: RecyclerView
-    private val showViewModel : MainViewModel by viewModel()
+    private val movieViewModel: MainViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentTVShowBinding.inflate(inflater, container, false)
+        binding = FragmentStarredMovieBinding.inflate(inflater, container, false)
         return viewBind.root
     }
 
@@ -34,19 +33,13 @@ class TVShowFragment : Fragment() {
     }
 
     private fun showLayout() {
-        val dataAdapter = TVAdapter()
-        showViewModel.getShows().observe(viewLifecycleOwner, { TVShow ->
-            if (TVShow != null){
-                when(TVShow.status){
-                    //Status.LOADING -> do something
-                    Status.SUCCESS -> {
-                        TVShow.data?.let { dataAdapter.setData(it) }
-                    }
-                    Status.ERROR -> {
-                        viewBind.recyclerView.visibility = View.GONE
-                        viewBind.notFound.visibility = View.VISIBLE
-                    }
-                }
+        val dataAdapter = MovieAdapter()
+        movieViewModel.getFavouriteMovies().observe(viewLifecycleOwner, { Movie ->
+            if (Movie.isNotEmpty()){
+                dataAdapter.setData(Movie)
+            }else{
+                viewBind.recyclerView.visibility = View.GONE
+                viewBind.notFound.visibility = View.VISIBLE
             }
         })
         with(recyclerView){
@@ -54,5 +47,4 @@ class TVShowFragment : Fragment() {
             adapter = dataAdapter
         }
     }
-
 }

@@ -20,7 +20,7 @@ abstract class EntertainmentDatabase : RoomDatabase() {
                 Room.databaseBuilder(
                     context.applicationContext,
                     EntertainmentDatabase::class.java,
-                    "Academies.db"
+                    "Entertainment.db"
                 ).build().apply {
                     INSTANCE = this
                 }
