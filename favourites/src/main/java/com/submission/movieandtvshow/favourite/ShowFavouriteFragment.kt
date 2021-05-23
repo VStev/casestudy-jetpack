@@ -1,42 +1,42 @@
-package com.submission.movieandtvshow.ui.fragments
+package com.submission.movieandtvshow.favourite
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.submission.movieandtvshow.R
-import com.submission.movieandtvshow.databinding.FragmentStarredMovieBinding
-import com.submission.movieandtvshow.viewmodelproviders.MainViewModel
+import com.submission.movieandtvshow.favourite.databinding.FragmentShowFavouriteBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.context.loadKoinModules
 
-class StarredMovieFragment : Fragment() {
-    private var binding : FragmentStarredMovieBinding? = null
-    private val viewBind get() = binding as FragmentStarredMovieBinding
+class ShowFavouriteFragment : Fragment() {
+    private var binding : FragmentShowFavouriteBinding? = null
+    private val viewBind get() = binding as FragmentShowFavouriteBinding
     private lateinit var recyclerView: RecyclerView
-    private val movieViewModel: MainViewModel by viewModel()
+    private val movieViewModel: FavouriteViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentStarredMovieBinding.inflate(inflater, container, false)
+        loadKoinModules(favouriteModule)
+        binding = FragmentShowFavouriteBinding.inflate(inflater, container, false)
         return viewBind.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView = view.findViewById(R.id.recyclerView)
+        recyclerView = viewBind.recyclerView
         showLayout()
     }
 
     private fun showLayout() {
-        val dataAdapter = MovieAdapter()
-        movieViewModel.getFavouriteMovies().observe(viewLifecycleOwner, { Movie ->
-            if (Movie.isNotEmpty()){
-                dataAdapter.setData(Movie)
+        val dataAdapter = TVAdapter()
+        movieViewModel.getFavouriteShows().observe(viewLifecycleOwner, { TVShow ->
+            if (TVShow.isNotEmpty()){
+                dataAdapter.setData(TVShow)
             }else{
                 viewBind.recyclerView.visibility = View.GONE
                 viewBind.notFound.visibility = View.VISIBLE

@@ -5,6 +5,7 @@ buildscript {
     ext.rxjava_version = "2.2.19"
     ext.rxandroid_version = "2.1.1"
     ext.lifecycle_version = "2.3.1"
+    ext.multidex_version = "2.0.1"
     repositories {
         google()
         mavenCentral()

@@ -17,12 +17,4 @@ class MainViewModel(private val repository: MovieShowUseCase) : ViewModel()  {
     fun getShows(): LiveData<Resource<List<TVShow>>> {
         return LiveDataReactiveStreams.fromPublisher(repository.getShows())
     }
-
-    fun getFavouriteMovies(): LiveData<List<Movie>> {
-        return LiveDataReactiveStreams.fromPublisher(repository.getFavouriteMovies())
-    }
-
-    fun getFavouriteShows(): LiveData<List<TVShow>> {
-        return LiveDataReactiveStreams.fromPublisher(repository.getFavouriteShows())
-    }
 }

@@ -1,4 +1,4 @@
-package com.submission.movieandtvshow.core.dataobjects
+package com.submission.movieandtvshow.core.dataobjects.remote.dataentities
 
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
@@ -10,24 +10,19 @@ import com.google.gson.annotations.SerializedName
 data class MovieEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
-    @SerializedName("id")
     @NonNull
     var movieID: String = "",
 
     @ColumnInfo(name = "title")
-    @SerializedName("title")
     var title: String = "",
 
     @ColumnInfo(name = "release_date")
-    @SerializedName("release_date")
     var releaseYear: String = "",
 
     @ColumnInfo(name = "overview")
-    @SerializedName("overview")
     var details: String = "",
 
     @ColumnInfo(name = "poster_path")
-    @SerializedName("poster_path")
     var poster: String = "",
 
     @ColumnInfo(name = "fav")

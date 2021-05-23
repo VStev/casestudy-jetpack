@@ -30,18 +30,18 @@
         tools:layout="@layout/activity_show_details" />
     <fragment
         android:id="@+id/nav_star_movie"
-        android:name="com.submission.movieandtvshow.ui.fragments.StarredMovieFragment"
+        android:name="com.submission.movieandtvshow.favourite.MovieFavouriteFragment"
         android:label="Starred Movie"
-        tools:layout="@layout/fragment_starred_movie" >
+        tools:layout="@layout/fragment_movie_favourite" >
         <action
             android:id="@+id/action_starredMovieFragment_to_nav_details"
             app:destination="@id/nav_details" />
     </fragment>
     <fragment
         android:id="@+id/nav_star_show"
-        android:name="com.submission.movieandtvshow.ui.fragments.StarredShowFragment"
+        android:name="com.submission.movieandtvshow.favourite.ShowFavouriteFragment"
         android:label="Starred Show"
-        tools:layout="@layout/fragment_starred_show" >
+        tools:layout="@layout/fragment_show_favourite" >
         <action
             android:id="@+id/action_starredShowFragment_to_nav_details"
             app:destination="@id/nav_details" />

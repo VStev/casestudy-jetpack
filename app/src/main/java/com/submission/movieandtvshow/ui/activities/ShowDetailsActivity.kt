@@ -71,7 +71,7 @@ class ShowDetailsActivity : AppCompatActivity() {
                                 val displayText = "$season / $episodes"
                                 seasonText.text = displayText
                                 contentDesc.text = TVShow.data?.details
-                                state = if (TVShow.data?.fav != null) TVShow.data!!.fav else false
+                                state = TVShow.data!!.fav
                                 setBookmarkState(state)
                             }
                             Status.ERROR -> {
@@ -99,7 +99,7 @@ class ShowDetailsActivity : AppCompatActivity() {
                                 viewBind.titleText.text = Movie.data?.title
                                 viewBind.releaseYear.text = Movie.data?.releaseYear
                                 contentDesc.text = Movie.data?.details
-                                state = if (Movie.data?.fav != null) Movie.data!!.fav else false
+                                state = Movie.data!!.fav
                                 setBookmarkState(state)
                             }
                             Status.ERROR -> {

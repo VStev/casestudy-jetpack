@@ -6,11 +6,8 @@ import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import com.google.gson.Gson
 import com.nhaarman.mockitokotlin2.verify
-import com.submission.movieandtvshow.core.dataobjects.MovieEntity
-import com.submission.movieandtvshow.core.dataobjects.TVShowEntity
-import com.submission.movieandtvshow.core.dataobjects.repository.RemoteRepository
-import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieDiscoverContainer
-import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.TVDiscoverContainer
+import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieEntity
+import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.TVShowEntity
 import com.submission.movieandtvshow.utilities.JsonFilesInKt
 import com.submission.movieandtvshow.utilities.PagedListUtility
 import com.submission.movieandtvshow.vo.Resource
@@ -32,16 +29,16 @@ class MainViewModelTest {
     private lateinit var viewModel: MainViewModel
 
     @Mock
-    private lateinit var televisionObserver: Observer<in Resource<PagedList<com.submission.movieandtvshow.core.dataobjects.TVShowEntity>>>
+    private lateinit var televisionObserver: Observer<in Resource<PagedList<TVShowEntity>>>
 
     @Mock
-    private lateinit var movieObserver: Observer<in Resource<PagedList<com.submission.movieandtvshow.core.dataobjects.MovieEntity>>>
+    private lateinit var movieObserver: Observer<in Resource<PagedList<MovieEntity>>>
 
     @Mock
-    private lateinit var favTvObserver: Observer<in PagedList<com.submission.movieandtvshow.core.dataobjects.TVShowEntity>>
+    private lateinit var favTvObserver: Observer<in PagedList<TVShowEntity>>
 
     @Mock
-    private lateinit var favMovieObserver: Observer<in PagedList<com.submission.movieandtvshow.core.dataobjects.MovieEntity>>
+    private lateinit var favMovieObserver: Observer<in PagedList<MovieEntity>>
 
     @Mock
     private lateinit var repository: com.submission.movieandtvshow.core.dataobjects.repository.RemoteRepository
@@ -53,8 +50,8 @@ class MainViewModelTest {
 
     @Test
     fun getMovies() {
-        val movieLists: Resource<PagedList<com.submission.movieandtvshow.core.dataobjects.MovieEntity>> = Resource.success(PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverMovie, com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieDiscoverContainer::class.java).result))
-        val result = MutableLiveData<Resource<PagedList<com.submission.movieandtvshow.core.dataobjects.MovieEntity>>>()
+        val movieLists: Resource<PagedList<MovieEntity>> = Resource.success(PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverMovie, com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieDiscoverContainer::class.java).result))
+        val result = MutableLiveData<Resource<PagedList<MovieEntity>>>()
         result.value = movieLists
         `when`(repository.getMovies()).thenReturn(result)
         val viewResult = viewModel.getMovies().value?.data
@@ -68,8 +65,8 @@ class MainViewModelTest {
 
     @Test
     fun getFavouriteMovies() {
-        val movieLists: PagedList<com.submission.movieandtvshow.core.dataobjects.MovieEntity> = PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverMovie, com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieDiscoverContainer::class.java).result)
-        val result = MutableLiveData<PagedList<com.submission.movieandtvshow.core.dataobjects.MovieEntity>>()
+        val movieLists: PagedList<MovieEntity> = PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverMovie, com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieDiscoverContainer::class.java).result)
+        val result = MutableLiveData<PagedList<MovieEntity>>()
         result.value = movieLists
         `when`(repository.getFavouriteMovies()).thenReturn(result)
         val viewResult = viewModel.getFavouriteMovies().value
@@ -83,8 +80,8 @@ class MainViewModelTest {
 
     @Test
     fun getShows() {
-        val showLists: Resource<PagedList<com.submission.movieandtvshow.core.dataobjects.TVShowEntity>> = Resource.success(PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverShow, com.submission.movieandtvshow.core.dataobjects.remote.dataentities.TVDiscoverContainer::class.java).result))
-        val result = MutableLiveData<Resource<PagedList<com.submission.movieandtvshow.core.dataobjects.TVShowEntity>>>()
+        val showLists: Resource<PagedList<TVShowEntity>> = Resource.success(PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverShow, com.submission.movieandtvshow.core.dataobjects.remote.dataentities.TVDiscoverContainer::class.java).result))
+        val result = MutableLiveData<Resource<PagedList<TVShowEntity>>>()
         result.value = showLists
         `when`(repository.getShows()).thenReturn(result)
         val viewResult = viewModel.getShows().value?.data
@@ -100,8 +97,8 @@ class MainViewModelTest {
 
     @Test
     fun getFavouriteShows() {
-        val showLists: PagedList<com.submission.movieandtvshow.core.dataobjects.TVShowEntity> = PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverShow, com.submission.movieandtvshow.core.dataobjects.remote.dataentities.TVDiscoverContainer::class.java).result)
-        val result = MutableLiveData<PagedList<com.submission.movieandtvshow.core.dataobjects.TVShowEntity>>()
+        val showLists: PagedList<TVShowEntity> = PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverShow, com.submission.movieandtvshow.core.dataobjects.remote.dataentities.TVDiscoverContainer::class.java).result)
+        val result = MutableLiveData<PagedList<TVShowEntity>>()
         result.value = showLists
         `when`(repository.getFavouriteShows()).thenReturn(result)
         val viewResult = viewModel.getFavouriteShows().value

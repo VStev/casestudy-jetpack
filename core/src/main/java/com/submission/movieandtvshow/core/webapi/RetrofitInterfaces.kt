@@ -1,10 +1,7 @@
 package com.submission.movieandtvshow.core.webapi
 
 import com.submission.movieandtvshow.core.BuildConfig
-import com.submission.movieandtvshow.core.dataobjects.MovieEntity
-import com.submission.movieandtvshow.core.dataobjects.TVShowEntity
-import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieDiscoverContainer
-import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.TVDiscoverContainer
+import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.*
 import io.reactivex.Flowable
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -21,9 +18,9 @@ interface RetrofitInterfaces {
 
     @Headers("Authorization: Bearer ${BuildConfig.API_KEY}")
     @GET("movie/{movieId}")
-    fun getMovieDetails(@Path("movieId") movieId: String): Flowable<MovieEntity>
+    fun getMovieDetails(@Path("movieId") movieId: String): Flowable<MovieResponse>
 
     @Headers("Authorization: Bearer ${BuildConfig.API_KEY}")
     @GET("tv/{tvId}")
-    fun getShowDetails(@Path("tvId") tvId: String): Flowable<TVShowEntity>
+    fun getShowDetails(@Path("tvId") tvId: String): Flowable<ShowResponse>
 }

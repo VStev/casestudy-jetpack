@@ -1,7 +1,7 @@
 package com.submission.movieandtvshow.core.dataobjects.repository
 
-import com.submission.movieandtvshow.core.dataobjects.MovieEntity
-import com.submission.movieandtvshow.core.dataobjects.TVShowEntity
+import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieEntity
+import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.TVShowEntity
 import com.submission.movieandtvshow.core.dataobjects.room.EntertainmentDAO
 import io.reactivex.Flowable
 

@@ -2,8 +2,10 @@ package com.submission.movieandtvshow.core.webapi
 
 import android.annotation.SuppressLint
 import android.util.Log
-import com.submission.movieandtvshow.core.dataobjects.MovieEntity
-import com.submission.movieandtvshow.core.dataobjects.TVShowEntity
+import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieEntity
+import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieResponse
+import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.ShowResponse
+import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.TVShowEntity
 import com.submission.movieandtvshow.core.utilities.EspressoIdlingResource
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -14,9 +16,9 @@ import io.reactivex.subjects.PublishSubject
 class RemoteDataSource(private val retrofit: RetrofitInterfaces) {
 
     @SuppressLint("CheckResult")
-    fun getMovies(): Flowable<ApiResponse<List<MovieEntity>>> {
+    fun getMovies(): Flowable<ApiResponse<List<MovieResponse>>> {
         EspressoIdlingResource.increment()
-        val returnValue = PublishSubject.create<ApiResponse<List<MovieEntity>>>()
+        val returnValue = PublishSubject.create<ApiResponse<List<MovieResponse>>>()
         val call = retrofit.discoverMovie()
         call
             .subscribeOn(Schedulers.computation())
@@ -34,9 +36,9 @@ class RemoteDataSource(private val retrofit: RetrofitInterfaces) {
     }
 
     @SuppressLint("CheckResult")
-    fun getShows(): Flowable<ApiResponse<List<TVShowEntity>>> {
+    fun getShows(): Flowable<ApiResponse<List<ShowResponse>>> {
         EspressoIdlingResource.increment()
-        val returnValue = PublishSubject.create<ApiResponse<List<TVShowEntity>>>()
+        val returnValue = PublishSubject.create<ApiResponse<List<ShowResponse>>>()
         val call = retrofit.discoverTv()
         call
             .subscribeOn(Schedulers.computation())
@@ -54,9 +56,9 @@ class RemoteDataSource(private val retrofit: RetrofitInterfaces) {
     }
 
     @SuppressLint("CheckResult")
-    fun getShowDetails(showId: String): Flowable<ApiResponse<TVShowEntity>>{
+    fun getShowDetails(showId: String): Flowable<ApiResponse<ShowResponse>>{
         EspressoIdlingResource.increment()
-        val returnValue = PublishSubject.create<ApiResponse<TVShowEntity>>()
+        val returnValue = PublishSubject.create<ApiResponse<ShowResponse>>()
         val call = retrofit.getShowDetails(showId)
         call
             .subscribeOn(Schedulers.computation())
@@ -73,9 +75,9 @@ class RemoteDataSource(private val retrofit: RetrofitInterfaces) {
     }
 
     @SuppressLint("CheckResult")
-    fun getMovieDetail(showId: String): Flowable<ApiResponse<MovieEntity>>{
+    fun getMovieDetail(showId: String): Flowable<ApiResponse<MovieResponse>>{
         EspressoIdlingResource.increment()
-        val returnValue = PublishSubject.create<ApiResponse<MovieEntity>>()
+        val returnValue = PublishSubject.create<ApiResponse<MovieResponse>>()
         val call = retrofit.getMovieDetails(showId)
         call
             .subscribeOn(Schedulers.computation())

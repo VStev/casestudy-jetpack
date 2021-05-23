@@ -1,7 +1,9 @@
 package com.submission.movieandtvshow.core.dataobjects.repository
 
-import com.submission.movieandtvshow.core.dataobjects.MovieEntity
-import com.submission.movieandtvshow.core.dataobjects.TVShowEntity
+import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieEntity
+import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieResponse
+import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.ShowResponse
+import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.TVShowEntity
 import com.submission.movieandtvshow.core.domain.model.Movie
 import com.submission.movieandtvshow.core.domain.model.TVShow
 import com.submission.movieandtvshow.core.domain.repository.RemoteRepoInterface
@@ -21,17 +23,18 @@ class RemoteRepository(
 ): RemoteRepoInterface {
 
     override fun getMovies(): Flowable<Resource<List<Movie>>> {
-        return object: com.submission.movieandtvshow.core.dataobjects.repository.NetworkBoundResource<List<Movie>, List<MovieEntity>>(appExecutors){
+        return object: NetworkBoundResource<List<Movie>, List<MovieResponse>>(appExecutors){
             override fun loadFromDB(): Flowable<List<Movie>> {
                 return localDataSource.getMovies().map{ClassMapper.mapMovieEntityToDomain(it)}
             }
 
-            override fun shouldFetch(data: List<Movie>?): Boolean = true
+            override fun shouldFetch(data: List<Movie>?): Boolean = data == null || data.isEmpty()
 
-            override fun createCall(): Flowable<ApiResponse<List<MovieEntity>>> = retrofit.getMovies()
+            override fun createCall(): Flowable<ApiResponse<List<MovieResponse>>> = retrofit.getMovies()
 
-            override fun saveCallResult(data: List<MovieEntity>) {
-                localDataSource.insertMovies(data)
+            override fun saveCallResult(data: List<MovieResponse>) {
+                val remappedData = ClassMapper.mapMovieResponseToEntity(data)
+                localDataSource.insertMovies(remappedData)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe()
@@ -40,17 +43,18 @@ class RemoteRepository(
     }
 
     override fun getShows(): Flowable<Resource<List<TVShow>>> {
-        return object: com.submission.movieandtvshow.core.dataobjects.repository.NetworkBoundResource<List<TVShow>, List<TVShowEntity>>(appExecutors){
+        return object: NetworkBoundResource<List<TVShow>, List<ShowResponse>>(appExecutors){
             override fun loadFromDB(): Flowable<List<TVShow>> {
                 return localDataSource.getShows().map{ ClassMapper.mapShowEntityToDomain(it) }
             }
 
-            override fun shouldFetch(data: List<TVShow>?): Boolean = true
+            override fun shouldFetch(data: List<TVShow>?): Boolean = data == null || data.isEmpty()
 
-            override fun createCall(): Flowable<ApiResponse<List<TVShowEntity>>> = retrofit.getShows()
+            override fun createCall(): Flowable<ApiResponse<List<ShowResponse>>> = retrofit.getShows()
 
-            override fun saveCallResult(data: List<TVShowEntity>) {
-                localDataSource.insertShows(data)
+            override fun saveCallResult(data: List<ShowResponse>) {
+                val remappedData = ClassMapper.mapShowResponseToEntity(data)
+                localDataSource.insertShows(remappedData)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe()
@@ -59,28 +63,28 @@ class RemoteRepository(
     }
 
     override fun getShowDetails(showId: String): Flowable<Resource<TVShow>> {
-        return object: com.submission.movieandtvshow.core.dataobjects.repository.NetworkBoundResource<TVShow, TVShowEntity>(appExecutors){
+        return object: NetworkBoundResource<TVShow, ShowResponse>(appExecutors){
             override fun loadFromDB(): Flowable<TVShow> = localDataSource.getShowDetails(showId).map{ ClassMapper.mapShowEntityToDomain(it) }
 
             override fun shouldFetch(data: TVShow?): Boolean = false
 
-            override fun createCall(): Flowable<ApiResponse<TVShowEntity>> = retrofit.getShowDetails(showId)
+            override fun createCall(): Flowable<ApiResponse<ShowResponse>> = retrofit.getShowDetails(showId)
 
-            override fun saveCallResult(data: TVShowEntity) {
+            override fun saveCallResult(data: ShowResponse) {
 
             }
         }.asFlowable()
     }
 
     override fun getMovieDetail(showId: String): Flowable<Resource<Movie>> {
-        return object: com.submission.movieandtvshow.core.dataobjects.repository.NetworkBoundResource<Movie, MovieEntity>(appExecutors){
+        return object: NetworkBoundResource<Movie, MovieResponse>(appExecutors){
             override fun loadFromDB(): Flowable<Movie> = localDataSource.getMovieDetails(showId).map{ ClassMapper.mapMovieEntityToDomain(it) }
 
             override fun shouldFetch(data: Movie?): Boolean = false
 
-            override fun createCall(): Flowable<ApiResponse<MovieEntity>> = retrofit.getMovieDetail(showId)
+            override fun createCall(): Flowable<ApiResponse<MovieResponse>> = retrofit.getMovieDetail(showId)
 
-            override fun saveCallResult(data: MovieEntity) {
+            override fun saveCallResult(data: MovieResponse) {
 
             }
         }.asFlowable()
