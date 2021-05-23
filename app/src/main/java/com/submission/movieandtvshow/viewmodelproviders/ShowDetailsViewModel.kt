@@ -1,16 +1,17 @@
 package com.submission.movieandtvshow.viewmodelproviders
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
-import com.submission.movieandtvshow.dataobjects.Movie
-import com.submission.movieandtvshow.dataobjects.TVShow
-import com.submission.movieandtvshow.dataobjects.repository.RemoteRepository
+import com.submission.movieandtvshow.dataobjects.MovieEntity
+import com.submission.movieandtvshow.dataobjects.TVShowEntity
+import com.submission.movieandtvshow.domain.model.Movie
+import com.submission.movieandtvshow.domain.model.TVShow
+import com.submission.movieandtvshow.domain.usecase.MovieShowUseCase
 import com.submission.movieandtvshow.vo.Resource
 
-class ShowDetailsViewModel(RemoteRepository: RemoteRepository) : ViewModel() {
+class ShowDetailsViewModel(private val repository: MovieShowUseCase) : ViewModel() {
     private var showID : String = ""
-    private val repository = RemoteRepository
 
     fun setShowID(showID: String?){
         if (showID != null) {
@@ -19,11 +20,11 @@ class ShowDetailsViewModel(RemoteRepository: RemoteRepository) : ViewModel() {
     }
 
     fun getMovie(): LiveData<Resource<Movie>> {
-        return repository.getMovieDetail(showID)
+        return LiveDataReactiveStreams.fromPublisher(repository.getMovieDetail(showID))
     }
 
-    fun getShow(): LiveData<Resource<TVShow>>  {
-        return repository.getShowDetails(showID)
+    fun getShow(): LiveData<Resource<TVShow>> {
+        return LiveDataReactiveStreams.fromPublisher(repository.getShowDetails(showID))
     }
 
     fun setFav(argument: Int, state: Boolean) {

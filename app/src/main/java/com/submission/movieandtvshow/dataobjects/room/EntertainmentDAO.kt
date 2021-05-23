@@ -1,30 +1,33 @@
 package com.submission.movieandtvshow.dataobjects.room
 
-import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
-import androidx.room.*
-import com.submission.movieandtvshow.dataobjects.Movie
-import com.submission.movieandtvshow.dataobjects.TVShow
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.submission.movieandtvshow.dataobjects.MovieEntity
+import com.submission.movieandtvshow.dataobjects.TVShowEntity
+import io.reactivex.Completable
+import io.reactivex.Flowable
 
 @Dao
 interface EntertainmentDAO {
     @Query("SELECT * FROM movies")
-    fun getMovies(): DataSource.Factory<Int, Movie>
+    fun getMovies(): Flowable<List<MovieEntity>>
 
     @Query("SELECT * FROM shows")
-    fun getShows(): DataSource.Factory<Int, TVShow>
+    fun getShows(): Flowable<List<TVShowEntity>>
 
     @Query("SELECT * FROM movies WHERE fav = :fav")
-    fun getFavMovie(fav: Boolean): DataSource.Factory<Int, Movie>
+    fun getFavMovie(fav: Boolean): Flowable<List<MovieEntity>>
 
     @Query("SELECT * FROM shows WHERE fav = :fav")
-    fun getFavShow(fav: Boolean): DataSource.Factory<Int, TVShow>
+    fun getFavShow(fav: Boolean): Flowable<List<TVShowEntity>>
 
     @Query("SELECT * FROM movies WHERE id = :showId")
-    fun getMovieDetails(showId: String): LiveData<Movie>
+    fun getMovieDetails(showId: String): Flowable<MovieEntity>
 
     @Query("SELECT * FROM shows WHERE id = :showId")
-    fun getShowDetails(showId: String): LiveData<TVShow>
+    fun getShowDetails(showId: String): Flowable<TVShowEntity>
 
     @Query("UPDATE movies SET fav = :fav WHERE id = :showId")
     fun setFavouriteMovie(fav: Boolean, showId: String)
@@ -33,14 +36,8 @@ interface EntertainmentDAO {
     fun setFavouriteShow(fav: Boolean, showId: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMovies(show: List<Movie>)
+    fun insertMovies(show: List<MovieEntity>): Completable
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertShows(show: List<TVShow>)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSingleShow(show: TVShow)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSingleMovie(show: Movie)
+    fun insertShows(show: List<TVShowEntity>): Completable
 }

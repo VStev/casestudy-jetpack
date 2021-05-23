@@ -4,8 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.google.gson.Gson
-import com.submission.movieandtvshow.dataobjects.Movie
-import com.submission.movieandtvshow.dataobjects.TVShow
+import com.submission.movieandtvshow.dataobjects.MovieEntity
+import com.submission.movieandtvshow.dataobjects.TVShowEntity
 import com.submission.movieandtvshow.dataobjects.repository.RemoteRepository
 import com.submission.movieandtvshow.utilities.JsonFilesInKt
 import com.submission.movieandtvshow.vo.Resource
@@ -34,10 +34,10 @@ class ShowDetailsViewModelTest {
     private lateinit var repository: RemoteRepository
 
     @Mock
-    private lateinit var observerTv: Observer<Resource<TVShow>>
+    private lateinit var observerTv: Observer<Resource<TVShowEntity>>
 
     @Mock
-    private lateinit var observerMovie: Observer<Resource<Movie>>
+    private lateinit var observerMovie: Observer<Resource<MovieEntity>>
 
     @Before
     fun setUp() {
@@ -45,18 +45,26 @@ class ShowDetailsViewModelTest {
     }
 
     @Test
+    fun setFav(){
+        viewModel.setShowID(movieID)
+        viewModel.setFav(2, true)
+        verify(repository).setFavouriteMovie(movieID, true)
+        viewModel.setShowID(showID)
+        viewModel.setFav(1, true)
+        verify(repository).setFavouriteShow(showID, true)
+    }
+
+    @Test
     fun getMovie() {
         viewModel.setShowID(movieID)
-        val moviePreset: Resource<Movie> = Resource.success(Gson().fromJson(JsonFilesInKt.moviePreset, Movie::class.java))
-        val result = MutableLiveData<Resource<Movie>>()
+        val moviePreset: Resource<MovieEntity> = Resource.success(Gson().fromJson(JsonFilesInKt.moviePreset, MovieEntity::class.java))
+        val result = MutableLiveData<Resource<MovieEntity>>()
         result.value = moviePreset
         `when`(repository.getMovieDetail(movieID)).thenReturn(result)
         val viewResult = viewModel.getMovie().value?.data
         verify(repository).getMovieDetail(movieID)
         assertNotNull(viewResult)
-        if (viewResult != null) {
-            assertEquals(movieID, viewResult.movieID)
-        }
+        assertEquals(movieID, viewResult?.movieID)
 
         viewModel.getMovie().observeForever(observerMovie)
         verify(observerMovie).onChanged(moviePreset)
@@ -65,16 +73,14 @@ class ShowDetailsViewModelTest {
     @Test
     fun getShow() {
         viewModel.setShowID(showID)
-        val showPreset: Resource<TVShow> = Resource.success(Gson().fromJson(JsonFilesInKt.showPreset, TVShow::class.java))
-        val result = MutableLiveData<Resource<TVShow>>()
+        val showPreset: Resource<TVShowEntity> = Resource.success(Gson().fromJson(JsonFilesInKt.showPreset, TVShowEntity::class.java))
+        val result = MutableLiveData<Resource<TVShowEntity>>()
         result.value = showPreset
         `when`(repository.getShowDetails(showID)).thenReturn(result)
         val viewResult = viewModel.getShow().value?.data
         verify(repository).getShowDetails(showID)
         assertNotNull(viewResult)
-        if (viewResult != null) {
-            assertEquals(showID, viewResult.showID)
-        }
+        assertEquals(showID, viewResult?.showID)
 
         viewModel.getShow().observeForever(observerTv)
         verify(observerTv).onChanged(showPreset)

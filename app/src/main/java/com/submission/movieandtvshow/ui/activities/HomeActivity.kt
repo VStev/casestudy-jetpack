@@ -8,16 +8,17 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.submission.movieandtvshow.R
+import com.submission.movieandtvshow.databinding.ActivityHomeBinding
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(){
+
+    private lateinit var binding : ActivityHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
-        val navView : BottomNavigationView = findViewById(R.id.bottom_nav_view)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         val navController = findNavController(R.id.host_fragment)
-        val appBarConfig = AppBarConfiguration.Builder(R.id.nav_tv, R.id.nav_movie, R.id.nav_star_show, R.id.nav_star_movie).build()
-        setupActionBarWithNavController(navController, appBarConfig)
-        navView.setupWithNavController(navController)
+        binding.bottomNavView.setupWithNavController(navController)
     }
 }

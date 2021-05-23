@@ -10,25 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.submission.movieandtvshow.R
 import com.submission.movieandtvshow.databinding.CardviewLayoutBinding
-import com.submission.movieandtvshow.dataobjects.TVShow
+import com.submission.movieandtvshow.dataobjects.TVShowEntity
+import com.submission.movieandtvshow.domain.model.TVShow
 import com.submission.movieandtvshow.ui.activities.ShowDetailsActivity
 
-class TVAdapter : PagedListAdapter<TVShow, TVAdapter.CardViewHolder>(DIFF_CALLBACK) {
+class TVAdapter : RecyclerView.Adapter<TVAdapter.CardViewHolder>() {
 
     private val mData = ArrayList<TVShow>()
     private val imageUrl = "https://image.tmdb.org/t/p/w500"
-
-    companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<TVShow>() {
-            override fun areItemsTheSame(oldItem: TVShow, newItem: TVShow): Boolean {
-                return oldItem.showID == newItem.showID
-            }
-
-            override fun areContentsTheSame(oldItem: TVShow, newItem: TVShow): Boolean {
-                return oldItem == newItem
-            }
-        }
-    }
 
     fun setData(items: List<TVShow>) {
         mData.clear()

@@ -40,11 +40,8 @@ class TVShowFragment : Fragment() {
                 when(TVShow.status){
                     //Status.LOADING -> do something
                     Status.SUCCESS -> {
-                        dataAdapter.notifyItemRangeRemoved(0, 20)
-                        dataAdapter.notifyItemRangeInserted(0, 20)
                         TVShow.data?.let { dataAdapter.setData(it) }
                         dataAdapter.notifyDataSetChanged()
-                        TVShow.data?.let { dataAdapter.submitList(it) }
                     }
                     Status.ERROR -> {
                         viewBind.recyclerView.visibility = View.GONE

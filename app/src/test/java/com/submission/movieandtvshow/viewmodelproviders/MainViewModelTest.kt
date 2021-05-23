@@ -6,8 +6,8 @@ import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import com.google.gson.Gson
 import com.nhaarman.mockitokotlin2.verify
-import com.submission.movieandtvshow.dataobjects.Movie
-import com.submission.movieandtvshow.dataobjects.TVShow
+import com.submission.movieandtvshow.dataobjects.MovieEntity
+import com.submission.movieandtvshow.dataobjects.TVShowEntity
 import com.submission.movieandtvshow.dataobjects.repository.RemoteRepository
 import com.submission.movieandtvshow.dataobjects.remote.dataentities.MovieDiscoverContainer
 import com.submission.movieandtvshow.dataobjects.remote.dataentities.TVDiscoverContainer
@@ -32,16 +32,16 @@ class MainViewModelTest {
     private lateinit var viewModel: MainViewModel
 
     @Mock
-    private lateinit var televisionObserver: Observer<in Resource<PagedList<TVShow>>>
+    private lateinit var televisionObserver: Observer<in Resource<PagedList<TVShowEntity>>>
 
     @Mock
-    private lateinit var movieObserver: Observer<in Resource<PagedList<Movie>>>
+    private lateinit var movieObserver: Observer<in Resource<PagedList<MovieEntity>>>
 
     @Mock
-    private lateinit var favTvObserver: Observer<in PagedList<TVShow>>
+    private lateinit var favTvObserver: Observer<in PagedList<TVShowEntity>>
 
     @Mock
-    private lateinit var favMovieObserver: Observer<in PagedList<Movie>>
+    private lateinit var favMovieObserver: Observer<in PagedList<MovieEntity>>
 
     @Mock
     private lateinit var repository: RemoteRepository
@@ -53,16 +53,14 @@ class MainViewModelTest {
 
     @Test
     fun getMovies() {
-        val movieLists: Resource<PagedList<Movie>> = Resource.success(PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverMovie, MovieDiscoverContainer::class.java).result))
-        val result = MutableLiveData<Resource<PagedList<Movie>>>()
+        val movieLists: Resource<PagedList<MovieEntity>> = Resource.success(PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverMovie, MovieDiscoverContainer::class.java).result))
+        val result = MutableLiveData<Resource<PagedList<MovieEntity>>>()
         result.value = movieLists
         `when`(repository.getMovies()).thenReturn(result)
         val viewResult = viewModel.getMovies().value?.data
         verify(repository).getMovies()
         assertNotNull(viewResult)
-        if (viewResult != null) {
-            assertEquals(20, viewResult.size)
-        }
+        assertEquals(20, viewResult?.size)
 
         viewModel.getMovies().observeForever(movieObserver)
         verify(movieObserver).onChanged(movieLists)
@@ -70,16 +68,14 @@ class MainViewModelTest {
 
     @Test
     fun getFavouriteMovies() {
-        val movieLists: PagedList<Movie> = PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverMovie, MovieDiscoverContainer::class.java).result)
-        val result = MutableLiveData<PagedList<Movie>>()
+        val movieLists: PagedList<MovieEntity> = PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverMovie, MovieDiscoverContainer::class.java).result)
+        val result = MutableLiveData<PagedList<MovieEntity>>()
         result.value = movieLists
         `when`(repository.getFavouriteMovies()).thenReturn(result)
         val viewResult = viewModel.getFavouriteMovies().value
         verify(repository).getFavouriteMovies()
         assertNotNull(viewResult)
-        if (viewResult != null) {
-            assertEquals(20, viewResult.size)
-        }
+        assertEquals(20, viewResult?.size)
 
         viewModel.getFavouriteMovies().observeForever(favMovieObserver)
         verify(favMovieObserver).onChanged(movieLists)
@@ -87,15 +83,15 @@ class MainViewModelTest {
 
     @Test
     fun getShows() {
-        val showLists: Resource<PagedList<TVShow>> = Resource.success(PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverShow, TVDiscoverContainer::class.java).result))
-        val result = MutableLiveData<Resource<PagedList<TVShow>>>()
+        val showLists: Resource<PagedList<TVShowEntity>> = Resource.success(PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverShow, TVDiscoverContainer::class.java).result))
+        val result = MutableLiveData<Resource<PagedList<TVShowEntity>>>()
         result.value = showLists
         `when`(repository.getShows()).thenReturn(result)
         val viewResult = viewModel.getShows().value?.data
         verify(repository).getShows()
         assertNotNull(viewResult)
         if (viewResult != null) {
-            assertEquals(20, viewResult.size)
+            assertEquals(20, viewResult?.size)
         }
 
         viewModel.getShows().observeForever(televisionObserver)
@@ -104,16 +100,14 @@ class MainViewModelTest {
 
     @Test
     fun getFavouriteShows() {
-        val showLists: PagedList<TVShow> = PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverShow, TVDiscoverContainer::class.java).result)
-        val result = MutableLiveData<PagedList<TVShow>>()
+        val showLists: PagedList<TVShowEntity> = PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverShow, TVDiscoverContainer::class.java).result)
+        val result = MutableLiveData<PagedList<TVShowEntity>>()
         result.value = showLists
         `when`(repository.getFavouriteShows()).thenReturn(result)
         val viewResult = viewModel.getFavouriteShows().value
         verify(repository).getFavouriteShows()
         assertNotNull(viewResult)
-        if (viewResult != null) {
-            assertEquals(20, viewResult.size)
-        }
+        assertEquals(20, viewResult?.size)
 
         viewModel.getFavouriteShows().observeForever(favTvObserver)
         verify(favTvObserver).onChanged(showLists)

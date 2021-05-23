@@ -149,7 +149,7 @@ object JsonFilesInKt{
             "        \"popularity\": 1848.224,\n" +
             "        \"poster_path\": \"/h8Rb9gBr48ODIwYUttZNYeMWeUU.jpg\",\n" +
             "        \"release_date\": \"2020-10-16\",\n" +
-            "        \"title\": \"Demon Slayer the Movie: Mugen Train\",\n" +
+            "        \"title\": \"Demon Slayer the MovieEntity: Mugen Train\",\n" +
             "        \"video\": false,\n" +
             "        \"vote_average\": 8.2,\n" +
             "        \"vote_count\": 663\n" +

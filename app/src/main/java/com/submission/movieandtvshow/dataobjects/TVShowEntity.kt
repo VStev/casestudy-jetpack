@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "shows")
-data class TVShow(
+data class TVShowEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
     @SerializedName("id")

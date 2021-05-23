@@ -10,8 +10,6 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.submission.movieandtvshow.R
 import com.submission.movieandtvshow.databinding.ActivityShowDetailsBinding
-import com.submission.movieandtvshow.dataobjects.Movie
-import com.submission.movieandtvshow.dataobjects.TVShow
 import com.submission.movieandtvshow.viewmodelproviders.ShowDetailsViewModel
 import com.submission.movieandtvshow.vo.Status
 import org.koin.androidx.viewmodel.ext.android.viewModel

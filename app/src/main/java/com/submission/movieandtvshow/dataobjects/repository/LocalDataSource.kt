@@ -1,39 +1,27 @@
 package com.submission.movieandtvshow.dataobjects.repository
 
-import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
-import com.submission.movieandtvshow.dataobjects.Movie
-import com.submission.movieandtvshow.dataobjects.TVShow
+import com.submission.movieandtvshow.dataobjects.MovieEntity
+import com.submission.movieandtvshow.dataobjects.TVShowEntity
 import com.submission.movieandtvshow.dataobjects.room.EntertainmentDAO
+import io.reactivex.Flowable
 
-class LocalDataSource private constructor(private val entertainmentDAO: EntertainmentDAO){
+class LocalDataSource(private val entertainmentDAO: EntertainmentDAO){
 
-    companion object {
-        private var INSTANCE: LocalDataSource? = null
+    fun getMovies(): Flowable<List<MovieEntity>> = entertainmentDAO.getMovies()
 
-        fun getInstance(entertainmentDAO: EntertainmentDAO): LocalDataSource =
-            INSTANCE ?: LocalDataSource(entertainmentDAO)
-    }
+    fun getShows(): Flowable<List<TVShowEntity>> = entertainmentDAO.getShows()
 
-    fun getMovies(): DataSource.Factory<Int, Movie> = entertainmentDAO.getMovies()
+    fun getMovieDetails(showId: String): Flowable<MovieEntity> = entertainmentDAO.getMovieDetails(showId)
 
-    fun getShows(): DataSource.Factory<Int, TVShow> = entertainmentDAO.getShows()
+    fun getShowDetails(showId: String): Flowable<TVShowEntity> = entertainmentDAO.getShowDetails(showId)
 
-    fun getMovieDetails(showId: String): LiveData<Movie> = entertainmentDAO.getMovieDetails(showId)
+    fun getFavMovie(fav: Boolean): Flowable<List<MovieEntity>> = entertainmentDAO.getFavMovie(fav)
 
-    fun getShowDetails(showId: String): LiveData<TVShow> = entertainmentDAO.getShowDetails(showId)
+    fun getFavShow(fav: Boolean): Flowable<List<TVShowEntity>> = entertainmentDAO.getFavShow(fav)
 
-    fun getFavMovie(fav: Boolean): DataSource.Factory<Int, Movie> = entertainmentDAO.getFavMovie(fav)
+    fun insertMovies(movies: List<MovieEntity>) = entertainmentDAO.insertMovies(movies)
 
-    fun getFavShow(fav: Boolean): DataSource.Factory<Int, TVShow> = entertainmentDAO.getFavShow(fav)
-
-    fun insertMovies(movies: List<Movie>) = entertainmentDAO.insertMovies(movies)
-
-    fun insertShows(shows: List<TVShow>) = entertainmentDAO.insertShows(shows)
-
-    fun insertSingleShow(show: TVShow) = entertainmentDAO.insertSingleShow(show)
-
-    fun insertSingleMovie(show: Movie) = entertainmentDAO.insertSingleMovie(show)
+    fun insertShows(shows: List<TVShowEntity>) = entertainmentDAO.insertShows(shows)
 
     fun setFavouriteMovie(show: String, state: Boolean){
         entertainmentDAO.setFavouriteMovie(state, show)

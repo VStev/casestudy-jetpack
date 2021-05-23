@@ -1,152 +1,103 @@
 package com.submission.movieandtvshow.dataobjects.repository
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
-import com.submission.movieandtvshow.dataobjects.Movie
-import com.submission.movieandtvshow.dataobjects.TVShow
+import com.submission.movieandtvshow.dataobjects.MovieEntity
+import com.submission.movieandtvshow.dataobjects.TVShowEntity
+import com.submission.movieandtvshow.domain.model.Movie
+import com.submission.movieandtvshow.domain.model.TVShow
+import com.submission.movieandtvshow.domain.repository.RemoteRepoInterface
 import com.submission.movieandtvshow.utilities.AppExecutors
+import com.submission.movieandtvshow.utilities.ClassMapper
 import com.submission.movieandtvshow.vo.Resource
 import com.submission.movieandtvshow.webapi.ApiResponse
-import com.submission.movieandtvshow.webapi.RetrofitCallback
+import com.submission.movieandtvshow.webapi.RemoteDataSource
+import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
-//singleton obj
 class RemoteRepository(
-    private val retrofit: RetrofitCallback,
+    private val retrofit: RemoteDataSource,
     private val localDataSource: LocalDataSource,
-    private val appExecutors: AppExecutors) {
+    private val appExecutors: AppExecutors): RemoteRepoInterface {
 
-    companion object {
-        @Volatile
-        private var instance: RemoteRepository? = null
-
-        fun getInstance(retrofit: RetrofitCallback, localData: LocalDataSource, appExecutors: AppExecutors): RemoteRepository =
-            instance ?: synchronized(this) {
-                instance ?: RemoteRepository(retrofit, localData, appExecutors).apply { instance = this }
-            }
-    }
-
-    fun getMovies(): LiveData<Resource<PagedList<Movie>>> {
-        return object: NetworkBoundResource<PagedList<Movie>, List<Movie>>(appExecutors){
-            override fun loadFromDB(): LiveData<PagedList<Movie>> {
-                val config = PagedList.Config.Builder()
-                    .setEnablePlaceholders(false)
-                    .setInitialLoadSizeHint(60)
-                    .setPageSize(20)
-                    .build()
-                return LivePagedListBuilder(localDataSource.getMovies(), config).build()
+    override fun getMovies(): Flowable<Resource<List<Movie>>> {
+        return object: NetworkBoundResource<List<Movie>, List<MovieEntity>>(appExecutors){
+            override fun loadFromDB(): Flowable<List<Movie>> {
+                return localDataSource.getMovies().map{ClassMapper.mapMovieEntityToDomain(it)}
             }
 
-            override fun shouldFetch(data: PagedList<Movie>?): Boolean = data == null || data.isEmpty()
+            override fun shouldFetch(data: List<Movie>?): Boolean = true
 
-            override fun createCall(): LiveData<ApiResponse<List<Movie>>> = retrofit.getMovies()
+            override fun createCall(): Flowable<ApiResponse<List<MovieEntity>>> = retrofit.getMovies()
 
-            override fun saveCallResult(data: List<Movie>) {
-                val list = ArrayList<Movie>()
-                for (movie in data){
-                    val item = Movie(
-                        movie.movieID,
-                        movie.title,
-                        movie.releaseYear,
-                        movie.details,
-                        movie.poster
-                    )
-                    list.add(item)
-                }
-                localDataSource.insertMovies(list)
+            override fun saveCallResult(data: List<MovieEntity>) {
+                localDataSource.insertMovies(data)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe()
             }
-        }.asLiveData()
+        }.asFlowable()
     }
 
-    fun getShows(): LiveData<Resource<PagedList<TVShow>>> {
-        return object: NetworkBoundResource<PagedList<TVShow>, List<TVShow>>(appExecutors){
-            override fun loadFromDB(): LiveData<PagedList<TVShow>> {
-                val config = PagedList.Config.Builder()
-                    .setEnablePlaceholders(false)
-                    .setInitialLoadSizeHint(60)
-                    .setPageSize(20)
-                    .build()
-                return LivePagedListBuilder(localDataSource.getShows(), config).build()
+    override fun getShows(): Flowable<Resource<List<TVShow>>> {
+        return object: NetworkBoundResource<List<TVShow>, List<TVShowEntity>>(appExecutors){
+            override fun loadFromDB(): Flowable<List<TVShow>> {
+                return localDataSource.getShows().map{ ClassMapper.mapShowEntityToDomain(it) }
             }
 
-            override fun shouldFetch(data: PagedList<TVShow>?): Boolean = data == null || data.isEmpty()
+            override fun shouldFetch(data: List<TVShow>?): Boolean = true
 
-            override fun createCall(): LiveData<ApiResponse<List<TVShow>>> = retrofit.getShows()
+            override fun createCall(): Flowable<ApiResponse<List<TVShowEntity>>> = retrofit.getShows()
 
-            override fun saveCallResult(data: List<TVShow>) {
-                val list = ArrayList<TVShow>()
-                for (show in data){
-                    val item = TVShow(
-                        show.showID,
-                        show.title,
-                        show.releaseYear,
-                        show.details,
-                        show.ongoing,
-                        show.episodes,
-                        show.seasons,
-                        show.poster
-                    )
-                    list.add(item)
-                }
-                localDataSource.insertShows(list)
+            override fun saveCallResult(data: List<TVShowEntity>) {
+                localDataSource.insertShows(data)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe()
             }
-        }.asLiveData()
+        }.asFlowable()
     }
 
-    fun getShowDetails(showId: String): LiveData<Resource<TVShow>> {
-        return object: NetworkBoundResource<TVShow, TVShow>(appExecutors){
-            override fun loadFromDB(): LiveData<TVShow> = localDataSource.getShowDetails(showId)
+    override fun getShowDetails(showId: String): Flowable<Resource<TVShow>> {
+        return object: NetworkBoundResource<TVShow, TVShowEntity>(appExecutors){
+            override fun loadFromDB(): Flowable<TVShow> = localDataSource.getShowDetails(showId).map{ ClassMapper.mapShowEntityToDomain(it) }
 
-            override fun shouldFetch(data: TVShow?): Boolean = data == null
+            override fun shouldFetch(data: TVShow?): Boolean = false
 
-            override fun createCall(): LiveData<ApiResponse<TVShow>> = retrofit.getShowDetails(showId)
+            override fun createCall(): Flowable<ApiResponse<TVShowEntity>> = retrofit.getShowDetails(showId)
 
-            override fun saveCallResult(data: TVShow) {
-                localDataSource.insertSingleShow(data)
+            override fun saveCallResult(data: TVShowEntity) {
+
             }
-        }.asLiveData()
+        }.asFlowable()
     }
 
-    fun getMovieDetail(showId: String): LiveData<Resource<Movie>> {
-        return object: NetworkBoundResource<Movie, Movie>(appExecutors){
-            override fun loadFromDB(): LiveData<Movie> = localDataSource.getMovieDetails(showId)
+    override fun getMovieDetail(showId: String): Flowable<Resource<Movie>> {
+        return object: NetworkBoundResource<Movie, MovieEntity>(appExecutors){
+            override fun loadFromDB(): Flowable<Movie> = localDataSource.getMovieDetails(showId).map{ ClassMapper.mapMovieEntityToDomain(it) }
 
-            override fun shouldFetch(data: Movie?): Boolean = data == null
+            override fun shouldFetch(data: Movie?): Boolean = false
 
-            override fun createCall(): LiveData<ApiResponse<Movie>> = retrofit.getMovieDetail(showId)
+            override fun createCall(): Flowable<ApiResponse<MovieEntity>> = retrofit.getMovieDetail(showId)
 
-            override fun saveCallResult(data: Movie) {
-                localDataSource.insertSingleMovie(data)
+            override fun saveCallResult(data: MovieEntity) {
+
             }
-        }.asLiveData()
+        }.asFlowable()
     }
 
-    fun getFavouriteMovies(): LiveData<PagedList<Movie>> {
-        val config = PagedList.Config.Builder()
-            .setEnablePlaceholders(false)
-            .setInitialLoadSizeHint(20)
-            .setPageSize(20)
-            .build()
-        return LivePagedListBuilder(localDataSource.getFavMovie(true), config).build()
+    override fun getFavouriteMovies(): Flowable<List<Movie>> {
+        return localDataSource.getFavMovie(true).map{ ClassMapper.mapMovieEntityToDomain(it) }
     }
 
-    fun getFavouriteShows(): LiveData<PagedList<TVShow>> {
-        val config = PagedList.Config.Builder()
-            .setEnablePlaceholders(false)
-            .setInitialLoadSizeHint(20)
-            .setPageSize(20)
-            .build()
-        return LivePagedListBuilder(localDataSource.getFavShow(true), config).build()
+    override fun getFavouriteShows(): Flowable<List<TVShow>> {
+        return localDataSource.getFavShow(true).map{ ClassMapper.mapShowEntityToDomain(it) }
     }
 
-    fun setFavouriteMovie(show: String, state: Boolean){
-        Log.d("RAISHUU", "setFavouriteMovie: CALLED $state")
+    override fun setFavouriteMovie(show: String, state: Boolean){
         appExecutors.diskIO().execute { localDataSource.setFavouriteMovie(show, state) }
     }
 
-    fun setFavouriteShow(show: String, state: Boolean){
-        Log.d("RAISHUU", "setFavouriteShow: CALLED $state")
+    override fun setFavouriteShow(show: String, state: Boolean){
         appExecutors.diskIO().execute { localDataSource.setFavouriteShow(show, state) }
     }
 }
