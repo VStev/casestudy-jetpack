@@ -6,12 +6,12 @@ import androidx.paging.DataSource
 import com.google.gson.Gson
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
-import com.submission.movieandtvshow.dataobjects.MovieEntity
-import com.submission.movieandtvshow.dataobjects.TVShowEntity
-import com.submission.movieandtvshow.dataobjects.remote.dataentities.MovieDiscoverContainer
-import com.submission.movieandtvshow.dataobjects.remote.dataentities.TVDiscoverContainer
-import com.submission.movieandtvshow.dataobjects.repository.LocalDataSource
-import com.submission.movieandtvshow.dataobjects.repository.RemoteRepository
+import com.submission.movieandtvshow.core.dataobjects.MovieEntity
+import com.submission.movieandtvshow.core.dataobjects.TVShowEntity
+import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieDiscoverContainer
+import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.TVDiscoverContainer
+import com.submission.movieandtvshow.core.dataobjects.repository.LocalDataSource
+import com.submission.movieandtvshow.core.dataobjects.repository.RemoteRepository
 import com.submission.movieandtvshow.utilities.AppExecutors
 import com.submission.movieandtvshow.utilities.JsonFilesInKt
 import com.submission.movieandtvshow.utilities.LiveDataUtility
@@ -35,27 +35,31 @@ class RemoteRepositoryTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var repository: RemoteRepository
+    private lateinit var repository: com.submission.movieandtvshow.core.dataobjects.repository.RemoteRepository
 
     @Mock
     private lateinit var retrofitCallback: RemoteDataSource
 
     @Mock
-    private lateinit var localDataSource: LocalDataSource
+    private lateinit var localDataSource: com.submission.movieandtvshow.core.dataobjects.repository.LocalDataSource
 
     @Mock
     private lateinit var appExecutors: AppExecutors
 
     @Before
     fun setUp() {
-        repository = RemoteRepository(retrofitCallback, localDataSource, appExecutors)
+        repository = com.submission.movieandtvshow.core.dataobjects.repository.RemoteRepository(
+            retrofitCallback,
+            localDataSource,
+            appExecutors
+        )
     }
 
     @Test
     fun getMovies() {
-        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, MovieEntity>
-        val movieLists: List<MovieEntity> = Gson().fromJson(JsonFilesInKt.discoverMovie, MovieDiscoverContainer::class.java).result
-        val result = Resource.success(PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverMovie, MovieDiscoverContainer::class.java).result))
+        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, com.submission.movieandtvshow.core.dataobjects.MovieEntity>
+        val movieLists: List<com.submission.movieandtvshow.core.dataobjects.MovieEntity> = Gson().fromJson(JsonFilesInKt.discoverMovie, com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieDiscoverContainer::class.java).result
+        val result = Resource.success(PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverMovie, com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieDiscoverContainer::class.java).result))
         `when`(localDataSource.getMovies()).thenReturn(dataSourceFactory)
         repository.getMovies()
         verify(localDataSource).getMovies()
@@ -65,9 +69,9 @@ class RemoteRepositoryTest {
 
     @Test
     fun getShows() {
-        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, TVShowEntity>
-        val showLists: List<TVShowEntity> = Gson().fromJson(JsonFilesInKt.discoverShow, TVDiscoverContainer::class.java).result
-        val result =  Resource.success(PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverShow, TVDiscoverContainer::class.java).result))
+        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, com.submission.movieandtvshow.core.dataobjects.TVShowEntity>
+        val showLists: List<com.submission.movieandtvshow.core.dataobjects.TVShowEntity> = Gson().fromJson(JsonFilesInKt.discoverShow, com.submission.movieandtvshow.core.dataobjects.remote.dataentities.TVDiscoverContainer::class.java).result
+        val result =  Resource.success(PagedListUtility.mockPagedList(Gson().fromJson(JsonFilesInKt.discoverShow, com.submission.movieandtvshow.core.dataobjects.remote.dataentities.TVDiscoverContainer::class.java).result))
         `when`(localDataSource.getShows()).thenReturn(dataSourceFactory)
         repository.getShows()
         verify(localDataSource).getShows()
@@ -77,8 +81,8 @@ class RemoteRepositoryTest {
 
     @Test
     fun getShowDetails() {
-        val showPreset: TVShowEntity = Gson().fromJson(JsonFilesInKt.showPreset, TVShowEntity::class.java)
-        val result =  MutableLiveData<TVShowEntity>()
+        val showPreset: com.submission.movieandtvshow.core.dataobjects.TVShowEntity = Gson().fromJson(JsonFilesInKt.showPreset, com.submission.movieandtvshow.core.dataobjects.TVShowEntity::class.java)
+        val result =  MutableLiveData<com.submission.movieandtvshow.core.dataobjects.TVShowEntity>()
         result.value = showPreset
         `when`(localDataSource.getShowDetails(eq("78204"))).thenReturn(result)
         val shows = LiveDataUtility.getValue(repository.getShowDetails(eq("78204")))
@@ -89,8 +93,8 @@ class RemoteRepositoryTest {
 
     @Test
     fun getMovieDetail() {
-        val moviePreset: MovieEntity = Gson().fromJson(JsonFilesInKt.moviePreset, MovieEntity::class.java)
-        val result =  MutableLiveData<MovieEntity>()
+        val moviePreset: com.submission.movieandtvshow.core.dataobjects.MovieEntity = Gson().fromJson(JsonFilesInKt.moviePreset, com.submission.movieandtvshow.core.dataobjects.MovieEntity::class.java)
+        val result =  MutableLiveData<com.submission.movieandtvshow.core.dataobjects.MovieEntity>()
         result.value = moviePreset
         `when`(localDataSource.getMovieDetails(eq("458576"))).thenReturn(result)
         val shows = LiveDataUtility.getValue(repository.getMovieDetail(eq("458576")))

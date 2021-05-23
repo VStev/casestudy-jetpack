@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.submission.movieandtvshow.R
+import com.submission.movieandtvshow.core.vo.Status
 import com.submission.movieandtvshow.databinding.FragmentMoviesBinding
 import com.submission.movieandtvshow.viewmodelproviders.MainViewModel
-import com.submission.movieandtvshow.vo.Status
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MoviesFragment : Fragment() {

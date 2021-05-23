@@ -4,9 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.google.gson.Gson
-import com.submission.movieandtvshow.dataobjects.MovieEntity
-import com.submission.movieandtvshow.dataobjects.TVShowEntity
-import com.submission.movieandtvshow.dataobjects.repository.RemoteRepository
+import com.submission.movieandtvshow.core.dataobjects.MovieEntity
+import com.submission.movieandtvshow.core.dataobjects.TVShowEntity
+import com.submission.movieandtvshow.core.dataobjects.repository.RemoteRepository
 import com.submission.movieandtvshow.utilities.JsonFilesInKt
 import com.submission.movieandtvshow.vo.Resource
 import org.junit.Assert.assertEquals
@@ -31,13 +31,13 @@ class ShowDetailsViewModelTest {
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Mock
-    private lateinit var repository: RemoteRepository
+    private lateinit var repository: com.submission.movieandtvshow.core.dataobjects.repository.RemoteRepository
 
     @Mock
-    private lateinit var observerTv: Observer<Resource<TVShowEntity>>
+    private lateinit var observerTv: Observer<Resource<com.submission.movieandtvshow.core.dataobjects.TVShowEntity>>
 
     @Mock
-    private lateinit var observerMovie: Observer<Resource<MovieEntity>>
+    private lateinit var observerMovie: Observer<Resource<com.submission.movieandtvshow.core.dataobjects.MovieEntity>>
 
     @Before
     fun setUp() {
@@ -57,8 +57,8 @@ class ShowDetailsViewModelTest {
     @Test
     fun getMovie() {
         viewModel.setShowID(movieID)
-        val moviePreset: Resource<MovieEntity> = Resource.success(Gson().fromJson(JsonFilesInKt.moviePreset, MovieEntity::class.java))
-        val result = MutableLiveData<Resource<MovieEntity>>()
+        val moviePreset: Resource<com.submission.movieandtvshow.core.dataobjects.MovieEntity> = Resource.success(Gson().fromJson(JsonFilesInKt.moviePreset, com.submission.movieandtvshow.core.dataobjects.MovieEntity::class.java))
+        val result = MutableLiveData<Resource<com.submission.movieandtvshow.core.dataobjects.MovieEntity>>()
         result.value = moviePreset
         `when`(repository.getMovieDetail(movieID)).thenReturn(result)
         val viewResult = viewModel.getMovie().value?.data
@@ -73,8 +73,8 @@ class ShowDetailsViewModelTest {
     @Test
     fun getShow() {
         viewModel.setShowID(showID)
-        val showPreset: Resource<TVShowEntity> = Resource.success(Gson().fromJson(JsonFilesInKt.showPreset, TVShowEntity::class.java))
-        val result = MutableLiveData<Resource<TVShowEntity>>()
+        val showPreset: Resource<com.submission.movieandtvshow.core.dataobjects.TVShowEntity> = Resource.success(Gson().fromJson(JsonFilesInKt.showPreset, com.submission.movieandtvshow.core.dataobjects.TVShowEntity::class.java))
+        val result = MutableLiveData<Resource<com.submission.movieandtvshow.core.dataobjects.TVShowEntity>>()
         result.value = showPreset
         `when`(repository.getShowDetails(showID)).thenReturn(result)
         val viewResult = viewModel.getShow().value?.data

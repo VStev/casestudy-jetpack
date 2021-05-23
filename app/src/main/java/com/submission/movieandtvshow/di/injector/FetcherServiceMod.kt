@@ -1,7 +1,7 @@
 package com.submission.movieandtvshow.di.injector
 
-import com.submission.movieandtvshow.domain.usecase.MovieShowInteraction
-import com.submission.movieandtvshow.domain.usecase.MovieShowUseCase
+import com.submission.movieandtvshow.core.domain.usecase.MovieShowInteraction
+import com.submission.movieandtvshow.core.domain.usecase.MovieShowUseCase
 import com.submission.movieandtvshow.viewmodelproviders.MainViewModel
 import com.submission.movieandtvshow.viewmodelproviders.ShowDetailsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel

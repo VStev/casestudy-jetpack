@@ -4,14 +4,11 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.paging.PagedListAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.submission.movieandtvshow.R
-import com.submission.movieandtvshow.databinding.CardviewLayoutBinding
-import com.submission.movieandtvshow.dataobjects.MovieEntity
-import com.submission.movieandtvshow.domain.model.Movie
+import com.submission.movieandtvshow.core.databinding.CardviewLayoutBinding
+import com.submission.movieandtvshow.core.domain.model.Movie
 import com.submission.movieandtvshow.ui.activities.ShowDetailsActivity
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.CardViewHolder>() {

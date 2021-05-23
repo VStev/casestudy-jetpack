@@ -9,9 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.submission.movieandtvshow.R
+import com.submission.movieandtvshow.core.vo.Status
 import com.submission.movieandtvshow.databinding.ActivityShowDetailsBinding
 import com.submission.movieandtvshow.viewmodelproviders.ShowDetailsViewModel
-import com.submission.movieandtvshow.vo.Status
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
 
@@ -65,13 +65,13 @@ class ShowDetailsActivity : AppCompatActivity() {
                                     )
                                 viewBind.directorOrOngoing.text = ongoing
                                 val season =
-                                    if (TVShow.data?.seasons as Int > 1) "${TVShow.data.seasons} Seasons" else "${TVShow.data.seasons} Season"
+                                    if (TVShow.data?.seasons as Int > 1) "${TVShow.data?.seasons} Seasons" else "${TVShow.data?.seasons} Season"
                                 val episodes =
-                                    if (TVShow.data.episodes as Int > 1) "${TVShow.data.episodes} Episodes" else "${TVShow.data.episodes} Episode"
+                                    if (TVShow.data?.episodes as Int > 1) "${TVShow.data?.episodes} Episodes" else "${TVShow.data?.episodes} Episode"
                                 val displayText = "$season / $episodes"
                                 seasonText.text = displayText
-                                contentDesc.text = TVShow.data.details
-                                state = TVShow.data.fav
+                                contentDesc.text = TVShow.data?.details
+                                state = if (TVShow.data?.fav != null) TVShow.data!!.fav else false
                                 setBookmarkState(state)
                             }
                             Status.ERROR -> {
@@ -99,9 +99,7 @@ class ShowDetailsActivity : AppCompatActivity() {
                                 viewBind.titleText.text = Movie.data?.title
                                 viewBind.releaseYear.text = Movie.data?.releaseYear
                                 contentDesc.text = Movie.data?.details
-                                if (Movie.data?.fav != null){
-                                    state = Movie.data.fav
-                                }
+                                state = if (Movie.data?.fav != null) Movie.data!!.fav else false
                                 setBookmarkState(state)
                             }
                             Status.ERROR -> {

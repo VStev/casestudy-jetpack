@@ -12,7 +12,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.submission.movieandtvshow.R
-import com.submission.movieandtvshow.utilities.EspressoIdlingResource
+import com.submission.movieandtvshow.core.utilities.EspressoIdlingResource
 import org.hamcrest.CoreMatchers.not
 import org.junit.After
 import org.junit.Before

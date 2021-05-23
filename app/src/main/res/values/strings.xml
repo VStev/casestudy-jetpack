@@ -18,4 +18,5 @@
     <string name="starred_shows">Starred Shows</string>
     <string name="starred_movies">Starred Movies</string>
     <string name="star">Star</string>
+    <string name="title_favourites">Favourite</string>
 </resources>
