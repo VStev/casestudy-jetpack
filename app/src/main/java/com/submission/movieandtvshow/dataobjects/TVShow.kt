@@ -12,7 +12,7 @@ data class TVShow(
     @NonNull
     @ColumnInfo(name = "id")
     @SerializedName("id")
-    var showID: String? = "",
+    var showID: String = "",
 
     @ColumnInfo(name = "name")
     @SerializedName("name")
