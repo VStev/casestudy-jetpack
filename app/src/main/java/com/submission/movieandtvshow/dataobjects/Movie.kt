@@ -12,7 +12,7 @@ data class Movie(
     @NonNull
     @ColumnInfo(name = "id")
     @SerializedName("id")
-    var movieID: String? = "",
+    var movieID: String = "",
 
     @ColumnInfo(name = "title")
     @SerializedName("title")
