@@ -36,11 +36,10 @@ class ShowDetailsActivity : AppCompatActivity() {
         viewBind = ActivityShowDetailsBinding.inflate(layoutInflater)
         detailViewModel.setShowID(showID)
         setContentView(viewBind.root)
+        showLayout()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.star_menu, menu)
-        this.menu = menu
+    private fun showLayout() {
         val contentDesc: TextView = findViewById(R.id.description)
         val seasonText: TextView = findViewById(R.id.season_and_episode_count)
         val ongoingText: TextView = findViewById(R.id.director_or_ongoing)
@@ -49,8 +48,9 @@ class ShowDetailsActivity : AppCompatActivity() {
                 detailViewModel.getShow().observe(this, { TVShow ->
                     if (TVShow != null){
                         when(TVShow.status){
-                            //Status.LOADING -> do something
+                            Status.LOADING -> viewBind.loadingbar.visibility = View.VISIBLE
                             Status.SUCCESS -> {
+                                viewBind.loadingbar.visibility = View.GONE
                                 val imageUrl = "https://image.tmdb.org/t/p/w500"
                                 val url = imageUrl + TVShow.data?.poster
                                 supportActionBar?.title = TVShow.data?.title
@@ -65,16 +65,17 @@ class ShowDetailsActivity : AppCompatActivity() {
                                     )
                                 viewBind.directorOrOngoing.text = ongoing
                                 val season =
-                                    if (TVShow.data?.seasons as Int > 1) "${TVShow.data?.seasons} Seasons" else "${TVShow.data?.seasons} Season"
+                                    if (TVShow.data?.seasons as Int > 1) "${TVShow.data?.seasons} ${getString(R.string.multi_season)}" else "${TVShow.data?.seasons} ${getString(R.string.single_season)}"
                                 val episodes =
-                                    if (TVShow.data?.episodes as Int > 1) "${TVShow.data?.episodes} Episodes" else "${TVShow.data?.episodes} Episode"
+                                    if (TVShow.data?.episodes as Int > 1) "${TVShow.data?.episodes} ${getString(R.string.multi_episode)}" else "${TVShow.data?.episodes} ${getString(R.string.single_episode)}"
                                 val displayText = "$season / $episodes"
                                 seasonText.text = displayText
                                 contentDesc.text = TVShow.data?.details
-                                state = TVShow.data!!.fav
+                                state = TVShow.data?.fav == true
                                 setBookmarkState(state)
                             }
                             Status.ERROR -> {
+                                viewBind.loadingbar.visibility = View.GONE
                                 viewBind.dataFound.visibility = View.GONE
                                 viewBind.notFound.visibility = View.VISIBLE
                             }
@@ -86,8 +87,9 @@ class ShowDetailsActivity : AppCompatActivity() {
                 detailViewModel.getMovie().observe(this, { Movie ->
                     if (Movie != null){
                         when(Movie.status){
-                            //Status.LOADING -> do something
+                            Status.LOADING -> viewBind.loadingbar.visibility = View.VISIBLE
                             Status.SUCCESS -> {
+                                viewBind.loadingbar.visibility = View.GONE
                                 val imageUrl = "https://image.tmdb.org/t/p/w500"
                                 val url = imageUrl + Movie.data?.poster
                                 supportActionBar?.title = Movie.data?.title
@@ -99,10 +101,11 @@ class ShowDetailsActivity : AppCompatActivity() {
                                 viewBind.titleText.text = Movie.data?.title
                                 viewBind.releaseYear.text = Movie.data?.releaseYear
                                 contentDesc.text = Movie.data?.details
-                                state = Movie.data!!.fav
+                                state = Movie.data?.fav == true
                                 setBookmarkState(state)
                             }
                             Status.ERROR -> {
+                                viewBind.loadingbar.visibility = View.GONE
                                 viewBind.dataFound.visibility = View.GONE
                                 viewBind.notFound.visibility = View.VISIBLE
                             }
@@ -111,6 +114,11 @@ class ShowDetailsActivity : AppCompatActivity() {
                 })
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.star_menu, menu)
+        this.menu = menu
         return true
     }
 

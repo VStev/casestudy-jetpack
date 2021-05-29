@@ -9,7 +9,7 @@ import org.koin.dsl.module
 
 @JvmField
 val useCaseMod = module {
-    factory<MovieShowUseCase> { MovieShowInteraction(get()) }
+    single<MovieShowUseCase> { MovieShowInteraction(get()) }
 }
 
 val viewModelMod = module {

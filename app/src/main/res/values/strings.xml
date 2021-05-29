@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">MovieAndTVShow</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tv_show">TV Show</string>
     <string name="movies">Movies</string>
     <string name="tooltip_example_title">Sword Art Online Alternative: Gun Gale Online</string>
@@ -18,4 +16,8 @@
     <string name="starred_shows">Starred Shows</string>
     <string name="starred_movies">Starred Movies</string>
     <string name="star">Star</string>
+    <string name="single_season">Season</string>
+    <string name="multi_season">Seasons</string>
+    <string name="single_episode">Episode</string>
+    <string name="multi_episode">Episodes</string>
 </resources>

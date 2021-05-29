@@ -38,12 +38,14 @@ class TVShowFragment : Fragment() {
         showViewModel.getShows().observe(viewLifecycleOwner, { TVShow ->
             if (TVShow != null){
                 when(TVShow.status){
-                    //Status.LOADING -> do something
+                    Status.LOADING -> viewBind.loadingbar.visibility = View.VISIBLE
                     Status.SUCCESS -> {
+                        viewBind.loadingbar.visibility = View.GONE
                         TVShow.data?.let { dataAdapter.setData(it) }
                         dataAdapter.notifyDataSetChanged()
                     }
                     Status.ERROR -> {
+                        viewBind.loadingbar.visibility = View.GONE
                         viewBind.recyclerView.visibility = View.GONE
                         viewBind.notFound.visibility = View.VISIBLE
                     }

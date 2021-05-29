@@ -4,7 +4,6 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "shows")
 data class TVShowEntity(
@@ -26,10 +25,10 @@ data class TVShowEntity(
     var ongoing: Boolean? = false,
 
     @ColumnInfo(name = "number_of_episodes")
-    var episodes: Int? = 0,
+    var episodes: Int = 1,
 
     @ColumnInfo(name = "number_of_seasons")
-    var seasons: Int? = 1,
+    var seasons: Int = 1,
 
     @ColumnInfo(name = "poster_path")
     var poster: String = "",

@@ -1,9 +1,6 @@
 package com.submission.movieandtvshow.core.dataobjects.room
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieEntity
 import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.TVShowEntity
 import io.reactivex.Completable
@@ -34,6 +31,9 @@ interface EntertainmentDAO {
 
     @Query("UPDATE shows SET fav = :fav WHERE id = :showId")
     fun setFavouriteShow(fav: Boolean, showId: String)
+
+    @Query("UPDATE shows SET number_of_episodes = :episode, number_of_seasons = :season WHERE id = :showId")
+    fun updateShow(showId: String, episode: Int, season: Int)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMovies(show: List<MovieEntity>): Completable

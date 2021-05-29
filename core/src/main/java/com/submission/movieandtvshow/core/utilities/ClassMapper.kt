@@ -105,7 +105,7 @@ object ClassMapper {
         return returnValue
     }
 
-/*    fun mapShowResponseToEntity(input: ShowResponse): TVShowEntity{
+    fun mapShowResponseToEntity(input: ShowResponse): TVShowEntity{
         return TVShowEntity(
             input.showID,
             input.title,
@@ -126,5 +126,5 @@ object ClassMapper {
             input.details,
             input.poster
         )
-    }*/
+    }
 }

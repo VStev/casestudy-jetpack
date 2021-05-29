@@ -1,9 +1,7 @@
 package com.submission.movieandtvshow.core.dataobjects.repository
 
-import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieEntity
 import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.MovieResponse
 import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.ShowResponse
-import com.submission.movieandtvshow.core.dataobjects.remote.dataentities.TVShowEntity
 import com.submission.movieandtvshow.core.domain.model.Movie
 import com.submission.movieandtvshow.core.domain.model.TVShow
 import com.submission.movieandtvshow.core.domain.repository.RemoteRepoInterface
@@ -66,12 +64,15 @@ class RemoteRepository(
         return object: NetworkBoundResource<TVShow, ShowResponse>(appExecutors){
             override fun loadFromDB(): Flowable<TVShow> = localDataSource.getShowDetails(showId).map{ ClassMapper.mapShowEntityToDomain(it) }
 
-            override fun shouldFetch(data: TVShow?): Boolean = false
+            override fun shouldFetch(data: TVShow?): Boolean = true
 
             override fun createCall(): Flowable<ApiResponse<ShowResponse>> = retrofit.getShowDetails(showId)
 
             override fun saveCallResult(data: ShowResponse) {
-
+                val show = data.showID
+                val episode = data.episodes
+                val season = data.seasons
+                appExecutors.diskIO().execute { localDataSource.updateShow(show, episode, season) }
             }
         }.asFlowable()
     }

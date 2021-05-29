@@ -6,6 +6,15 @@ plugins {
 }
 apply from: '../shared_dependencies.gradle'
 
+apply plugin: 'com.squareup.leakcanary.deobfuscation'
+
+leakCanary {
+    // LeakCanary needs to know which variants have obfuscation turned on
+    filterObfuscatedVariants { variant ->
+        variant.name == "debug"
+    }
+}
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -25,7 +34,11 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -43,30 +56,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.multidex:multidex:$multidex_version"
 
-    //rx
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
-    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
-    implementation "androidx.room:room-rxjava2:$room_version"
-    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
-
-    //rfit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.retrofit2:retrofit-mock:2.9.0'
-    implementation "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
-    implementation "com.squareup.okhttp3:logging-interceptor:4.8.0"
-    implementation "com.squareup.okhttp3:okhttp:4.9.0"
-
-    //insert-koin
-    implementation "io.insert-koin:koin-android:3.0.2"
-    implementation "io.insert-koin:koin-android-ext:3.0.2"
-    implementation "io.insert-koin:koin-androidx-workmanager:3.0.2"
-    implementation "org.mockito:mockito-core:3.9.0"
-
-    //room
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation "androidx.room:room-runtime:2.3.0"
-    implementation "androidx.room:room-ktx:2.3.0"
+    //db encryption
+    implementation "net.zetetic:android-database-sqlcipher:4.4.0"
+    implementation "androidx.sqlite:sqlite-ktx:2.1.0"
 
     //navi
     implementation 'androidx.navigation:navigation-dynamic-features-fragment:2.3.5'

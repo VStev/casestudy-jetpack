@@ -19,10 +19,10 @@ data class ShowResponse(
     var ongoing: Boolean? = false,
 
     @SerializedName("number_of_episodes")
-    var episodes: Int? = 0,
+    var episodes: Int = 0,
 
     @SerializedName("number_of_seasons")
-    var seasons: Int? = 1,
+    var seasons: Int = 1,
 
     @SerializedName("poster_path")
     var poster: String = ""

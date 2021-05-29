@@ -23,11 +23,9 @@ class LocalDataSource(private val entertainmentDAO: EntertainmentDAO){
 
     fun insertShows(shows: List<TVShowEntity>) = entertainmentDAO.insertShows(shows)
 
-    fun setFavouriteMovie(show: String, state: Boolean){
-        entertainmentDAO.setFavouriteMovie(state, show)
-    }
+    fun setFavouriteMovie(show: String, state: Boolean) = entertainmentDAO.setFavouriteMovie(state, show)
 
-    fun setFavouriteShow(show: String, state: Boolean){
-        entertainmentDAO.setFavouriteShow(state, show)
-    }
+    fun setFavouriteShow(show: String, state: Boolean) = entertainmentDAO.setFavouriteShow(state, show)
+
+    fun updateShow(showId: String, episode: Int, season: Int) = entertainmentDAO.updateShow(showId, episode, season)
 }

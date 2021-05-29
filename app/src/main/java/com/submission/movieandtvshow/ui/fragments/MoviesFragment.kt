@@ -38,12 +38,14 @@ class MoviesFragment : Fragment() {
         movieViewModel.getMovies().observe(viewLifecycleOwner, { Movie ->
             if (Movie != null){
                 when(Movie.status){
-                    //Status.LOADING -> do something
+                    Status.LOADING -> viewBind.loadingbar.visibility = View.VISIBLE
                     Status.SUCCESS -> {
+                        viewBind.loadingbar.visibility = View.GONE
                         Movie.data?.let { dataAdapter.setData(it) }
                         dataAdapter.notifyDataSetChanged()
                     }
                     Status.ERROR -> {
+                        viewBind.loadingbar.visibility = View.GONE
                         viewBind.recyclerView.visibility = View.GONE
                         viewBind.notFound.visibility = View.VISIBLE
                     }
