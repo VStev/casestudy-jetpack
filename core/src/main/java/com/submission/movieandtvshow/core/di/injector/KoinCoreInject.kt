@@ -11,7 +11,6 @@ import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
 import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -23,7 +22,7 @@ import java.util.concurrent.TimeUnit
 val dbModule = module {
     factory { get<EntertainmentDatabase>().entertainmentDao() }
     single {
-        val passphrase: ByteArray = SQLiteDatabase.getBytes("Hxx0rBunny".toCharArray())
+        val passphrase: ByteArray = SQLiteDatabase.getBytes("hxxrdlt4".toCharArray())
         val factory = SupportFactory(passphrase)
         Room.databaseBuilder(
             androidContext(),
@@ -46,7 +45,6 @@ val netModule = module {
             .add(hostname, "sha256/KwccWaCgrnaw6tsrrSO61FgLacNgG2MMLq8GE6+oP5I=")
             .build()
         OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .connectTimeout(120, TimeUnit.SECONDS)
             .readTimeout(120, TimeUnit.SECONDS)
             .certificatePinner(certificatePinner)
